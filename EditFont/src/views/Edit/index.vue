@@ -431,7 +431,7 @@ watch(() => store.select, (select) => {
 
 .editcont {
   position: relative;
-  height: 100%;
+  max-height: 88vh;
   width: 100%;
   overflow-y: auto;
   object-fit: contain;
