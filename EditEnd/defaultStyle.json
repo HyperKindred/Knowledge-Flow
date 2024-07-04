@@ -1,0 +1,53 @@
+{
+    "heading": {
+      "1": {
+        "font-size": "30px",
+        "font-family": "Arial, sans-serif",
+        "color": "white",
+        "margin-top": "10px",
+        "margin-bottom": "10px"
+      },
+      "2": {
+        "font-size": "25px",
+        "font-family": "Arial, sans-serif",
+        "color": "white",
+        "margin-top": "8px",
+        "margin-bottom": "8px"
+      },
+      "3": {
+        "font-size": "20px",
+        "font-family": "Arial, sans-serif",
+        "color": "white",
+        "margin-top": "5px",
+        "margin-bottom": "5px"
+      },
+      "4": {
+        "font-size": "16px",
+        "font-family": "Arial, sans-serif",
+        "color": "white",
+        "margin-top": "5px",
+        "margin-bottom": "5px"
+      }
+    },
+    "paragraph": {
+      "font-size": "16px",
+      "font-family": "Arial, sans-serif",
+      "color": "white",
+      "margin-top": "5px",
+      "margin-bottom": "5px"
+    },
+    "bulletList": {
+      "font-size": "16px",
+      "font-family": "Arial, sans-serif",
+      "color": "white",
+      "margin-top": "5px",
+      "margin-bottom": "5px"
+    },
+    "orderedList": {
+      "font-size": "16px",
+      "font-family": "Arial, sans-serif",
+      "color": "white",
+      "margin-top": "5px",
+      "margin-bottom": "5px"
+    }
+  }
