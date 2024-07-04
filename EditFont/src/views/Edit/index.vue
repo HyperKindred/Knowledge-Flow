@@ -1,5 +1,6 @@
 <template>
   <div class="EditMain" ref="filecont" >
+    <img class="background" src="@/assets/images/welcome_background.jpg">
     <div class="lefttools">
       <div class="lefttop">
         <img :src="misakaImg" alt="Misaka Mikoto">
@@ -299,9 +300,18 @@ watch(() => store.select, (select) => {
   height: 98.5vh;
 
   display: grid;
-  grid-template-columns: 25% 70% 5%;
+  grid-template-columns: 25% 75%;
 
 }
+
+.background {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        position: fixed;
+        z-index: -1;
+    }
 
 .lefttools {
   position: relative;
@@ -325,15 +335,18 @@ watch(() => store.select, (select) => {
 
 }
 
-.lefttop img{
+.icon{
   position: relative;
-  max-width: 80%;
-  max-height: 80%;
-  left: 2.5%;
+  max-width: 40%;
+  max-height: 40%;
   object-fit: contain;
-  margin-right: 30px;
+  cursor: pointer;
 }
+
+
+
 .username-display {
+  padding-left: 5%;
   margin: 0; 
 }
 .leftlist{
@@ -383,46 +396,30 @@ watch(() => store.select, (select) => {
   left: 2.5%;
   top: 2.5%;
   display: grid;
-  grid-template-rows: 5% 92% 3%;
-  border: 1px solid #4f5c5765;
+  grid-template-rows: 5% 91% 4%;
 }
 
-.editorcard .editor {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
-  display: grid;
-  grid-template-rows: 10% 90%;
-}
 
-.editorcard .editor {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
-  display: grid;
-  grid-template-rows: 10% 90%;
-}
 
 .toptools {
   display: flex;
-  background-color: rgba(207, 220, 245, 0.199);
+  background-color: rgba(106, 106, 106, 0.386);
   border-bottom: 1px dashed #9ca19f65;
 }
 
 .saveText {
-  background-color: rgba(173, 212, 247, 0.813);
+  background-color: rgba(50, 50, 50, 0.877);
   color: beige;
+  border: 1.5px solid beige;
   margin-right: 20px;
   margin-left: auto;
 }
 
+
+
 .bottomcount {
-  background-color: rgba(207, 220, 245, 0);
-  border-top: 1px dashed #9ca19f65;
+  background-color: rgba(35, 35, 35, 0.913);
+  border-top: 5px;
   height: 100%;
   width: 100%;
   display: grid;
@@ -434,11 +431,13 @@ watch(() => store.select, (select) => {
 
 .editcont {
   position: relative;
-  height: 700px;
+  height: 100%;
   width: 100%;
   overflow-y: auto;
   object-fit: contain;
+  background-color: rgba(41, 41, 41, 0.687);
 }
+
 
 .ProseMirror {
   overflow: hidden !important;
