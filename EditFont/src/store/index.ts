@@ -25,6 +25,7 @@ export const mainStore = defineStore('main', {
     content: null,
     select: null,
     headings: [],
+    background: "night_background",
     stylesConfig: {
       heading: {
         1: {

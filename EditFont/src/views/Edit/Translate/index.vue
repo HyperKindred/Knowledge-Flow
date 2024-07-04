@@ -33,12 +33,12 @@ const mode = ref('0');
 
 const switchLanguages = () => {
     if (mode.value === '0') {
-        document.querySelector('.left-language').style.left = 'calc(65% - 30px)';
-        document.querySelector('.right-language').style.left = '35%';
+        document.querySelector('.left-language').style.left = '263px';
+        document.querySelector('.right-language').style.left = '151px';
         mode.value = '1';
     } else {
-        document.querySelector('.left-language').style.left = '35%';
-        document.querySelector('.right-language').style.left = 'calc(65% - 30px)';
+        document.querySelector('.left-language').style.left = '151px';
+        document.querySelector('.right-language').style.left = '263px';
         mode.value = '0';
     }
 }
@@ -112,25 +112,28 @@ const copy = async () => {
     align-items: center;
     padding-bottom: 10px;
 }
+
+.title h2 {
+  flex: 2;
+  text-align: center;
+}
 .language-switcher {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 4%;
-    padding-bottom: 4%;
-    padding: relative;
+    height: 7%;
 }
 .left-language {
     position: absolute;
-    left: 35%;
+    left: 153px;
     font-size: 15px;
     color: #ffffff;
     transition: left 0.3s ease;
 }
 .right-language {
     position: absolute;
-    left: calc(65% - 30px);
+    left: 263px;
     font-size: 15px;
     color: #ffffff;
     transition: left 0.3s ease;
@@ -172,7 +175,6 @@ const copy = async () => {
 }
 .translate-button {
     margin: 10px;
-    padding: 5px 15px;
     background-color: #303030;
     color: #919191;
     border: none;

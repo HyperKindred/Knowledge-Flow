@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <img src="../../image/bright-4357415.jpg">
+        <img src="../../assets/images/sign_background.jpg">
         <div class="signin-wrapper">
             <h1 class="header">
                 注册

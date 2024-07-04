@@ -1,6 +1,6 @@
 <template>
   <div class="EditMain" ref="filecont" >
-    <img class="background" src="@/assets/images/welcome_background.jpg">
+    <img class="background" src="@/assets/images/night_background.jpg">
     <div class="lefttools">
       <div class="lefttop">
         <img :src="misakaImg" alt="Misaka Mikoto">
