@@ -293,7 +293,7 @@ function showStyleEditor(data) {
   justify-content: center;
   align-items: center;
   margin-bottom: 10px;
-  background-color: rgba(32, 32, 32, 0.233);
+  background-color: rgba(32, 32, 32, 0);
 }
 
 

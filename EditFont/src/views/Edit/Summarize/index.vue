@@ -71,7 +71,7 @@ const copy = async () => {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #222222;
+    background-color: #22222200;
 }
 .title {
     color: #ffffff;
@@ -96,7 +96,7 @@ const copy = async () => {
     resize: none;
     outline: none;
     background-color: #333333;
-    color: #767676;
+    color:beige;
     border: none;
     padding: 10px;
     width: 80%;

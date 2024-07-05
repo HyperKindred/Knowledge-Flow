@@ -190,9 +190,32 @@ const handleNodeClick = (data) => {
     if (res.data.noteList[i][0] == store.openNoteID) {
     const htmlContent = res.data.noteList[i][2];
     store.setHTMLContent(htmlContent);
+    store.usedStyleID = res.data.noteList[i][3];
+    // alert(store.usedStyleID);
     }
     }
   });
+
+  let formData = new FormData();
+  formData.append("username", store.username);
+  axios({
+    method: 'post',
+    url: `${store.ipAddress}/api/pullStyleList`,
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  }).then(res => {
+    for (let i = 0; i < res.data.styleList.length; i++) {
+    if (res.data.styleList[i][0] == store.usedStyleID) {
+    const StyleConfig = res.data.styleList[i][2];
+    store.setStyleConfig(JSON.parse(StyleConfig));
+    alert(JSON.stringify(store.stylesConfig, null, 2));
+    }
+    }
+  });
+  
+
 };
 
 
@@ -241,7 +264,7 @@ function showEditorCard() {
   justify-content: center;
   align-items: center;
   margin-bottom: 10px;
-  background-color: rgba(32, 32, 32, 0.233);
+  background-color: rgba(32, 32, 32, 0);
 }
 
 .add-file h2 {

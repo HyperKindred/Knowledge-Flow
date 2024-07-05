@@ -342,7 +342,7 @@ watch(() => store.select, (select) => {
 .lefttools {
   position: relative;
   display: flex;
-  background-color: rgba(11, 11, 11, 0.6);
+  background-color: rgba(255, 255, 255, 0);
   height: 100%;
   width: 100%;
   display: grid;
@@ -358,6 +358,7 @@ watch(() => store.select, (select) => {
   height: 90%;
   left: 2.5%;
   top: 5%;
+  border-radius: 5px;
 
 }
 
@@ -388,6 +389,7 @@ watch(() => store.select, (select) => {
   left: 2.5%;
   top: 2.5%;
   object-fit: contain;
+  border-radius: 5px;
 }
 
 .leftlist svg{
@@ -408,7 +410,7 @@ watch(() => store.select, (select) => {
   left: 2.5%;
   bottom: 2.5%;
   top: 1%;
-  
+  border-radius: 5px;
 }
 
 
@@ -425,6 +427,7 @@ watch(() => store.select, (select) => {
   top: 2.5%;
   display: grid;
   grid-template-rows: 5% 91% 4%;
+  border-radius: 5px;
 }
 
 

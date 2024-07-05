@@ -63,6 +63,7 @@
     action: () => {
       store.editor.chain().focus().toggleHeading({ level: 1 }).run();
       store.applyStylesFromConfig();
+      // alert(JSON.stringify(store.stylesConfig, null, 2));
     },
     isActive: () => store.editor.isActive('heading', { level: 1 }),
   },
