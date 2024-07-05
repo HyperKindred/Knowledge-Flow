@@ -94,8 +94,7 @@ const signUp = () => {
         z-index: -1;
     }
     .signin-wrapper {
-        opacity: 0.9;
-        background-color: #6d8fb0;
+        background-color: rgba(136, 169, 202, 0.8); 
         width: 358px;
         height: 628px;
         border-radius: 15px;
@@ -106,8 +105,10 @@ const signUp = () => {
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
+        backdrop-filter: blur(5px);
     }
     .header {
+        opacity: 0.7;
         font-size: 38px;
         font-weight: bold;
         text-align: center;
@@ -116,10 +117,12 @@ const signUp = () => {
         color: #ffffff;
     }
     .input-title {
+        opacity: 0.7;
         font-size: 18px;
         color: #ffffff;
     }
     .input-item {
+        opacity: 0.7;
         display: block;
         width: 100%;
         height: 35px;
@@ -143,6 +146,7 @@ const signUp = () => {
         color: #c3c3c3;
     }
     .btn {
+        opacity: 0.7;
         text-align: center;
         outline: none;
         padding: 10px;
@@ -152,9 +156,11 @@ const signUp = () => {
         color: #fff;
     }
     .link {
+        opacity: 0.9;
         color: #04073d;
     }
     .msg {
+        opacity: 0.7;
         text-align: center;
         line-height: 88px;
         color: #eeeeee;
