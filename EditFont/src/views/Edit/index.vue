@@ -38,7 +38,11 @@
       <div v-if="store.isShow" class="editorcard">
         <div class="toptools">
           <EditorMenu :editor="editor" />
-          <button class="saveText" @click="saveHTMLText()">Save</button>
+          <div class="topBtn">
+            <button class="topButton" @click="autoFormat()">思维导图</button>
+          <button class="topButton" @click="autoFormat()">格式化</button>
+          <button class="topButton" @click="saveHTMLText()">Save</button>
+        </div>
         </div>
         <div class="editcont">
           <ContextMenu>
@@ -213,6 +217,46 @@ const saveHTMLText = () => {
   });
 };
 
+
+const autoFormat = () => {
+  if (editor.value) {
+    editorContent.value = editor.value.getHTML();
+  }
+  let formdata = new FormData();
+  formdata.append("text", editorContent.value);
+  axios({
+    method: 'post',
+    url: `${store.ipAddress}/api/autoFormat`,
+    data: formdata,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  }).then(res => {
+    const htmlContent = res.data.msg;
+    store.setHTMLContent(htmlContent);
+  })
+}
+
+const autoMindmap = () => {
+  if (editor.value) {
+    editorContent.value = editor.value.getHTML();
+  }
+  let formdata = new FormData();
+  formdata.append("text", editorContent.value);
+  formdata.append("username", store.username);
+  axios({
+    method: 'post',
+    url: `${store.ipAddress}/api/autoMindmap`,
+    data: formdata,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  }).then(res => {
+    if(res.data.ret){
+      alert(res.data.msg);
+    }
+  })
+}
 
 watch(() => store.htmlContent, (newContent) => {
   if (editor.value) {
@@ -438,12 +482,19 @@ watch(() => store.select, (select) => {
   border-bottom: 1px dashed #9ca19f65;
 }
 
-.saveText {
+
+.topBtn {
+  position: relative;
+  display: flex;
+  margin-right: 0px;
+  margin-left: auto;
+}
+.topButton {
   background-color: rgba(50, 50, 50, 0.877);
   color: beige;
   border: 1.5px solid beige;
-  margin-right: 20px;
-  margin-left: auto;
+  max-height: 100%;
+  margin-right: 5px;
 }
 
 
