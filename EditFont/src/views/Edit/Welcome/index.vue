@@ -39,7 +39,7 @@ const authors = [
   justify-content: space-between;
   align-items: center;
   height: 98.5vh;
-  width: 100%;
+  width: 99.2%;
 }
 
 .center {
