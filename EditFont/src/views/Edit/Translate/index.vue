@@ -103,7 +103,7 @@ const copy = async () => {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #222222;
+    background-color: #ffffff00;
 }
 .title {
     color: #ffffff;
@@ -122,7 +122,9 @@ const copy = async () => {
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 7%;
+    height: 4%;
+    padding-bottom: 4%;
+    padding: relative;
 }
 .left-language {
     position: absolute;
