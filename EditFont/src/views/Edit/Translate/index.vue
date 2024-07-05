@@ -33,12 +33,12 @@ const mode = ref('0');
 
 const switchLanguages = () => {
     if (mode.value === '0') {
-        document.querySelector('.left-language').style.left = '263px';
-        document.querySelector('.right-language').style.left = '151px';
+        document.querySelector('.left-language').style.left = 'calc(65% - 30px)';
+        document.querySelector('.right-language').style.left = '35%';
         mode.value = '1';
     } else {
-        document.querySelector('.left-language').style.left = '151px';
-        document.querySelector('.right-language').style.left = '263px';
+        document.querySelector('.left-language').style.left = '35%';
+        document.querySelector('.right-language').style.left = 'calc(65% - 30px)';
         mode.value = '0';
     }
 }
@@ -126,14 +126,14 @@ const copy = async () => {
 }
 .left-language {
     position: absolute;
-    left: 153px;
+    left: 35%;
     font-size: 15px;
     color: #ffffff;
     transition: left 0.3s ease;
 }
 .right-language {
     position: absolute;
-    left: 263px;
+    left: calc(65% - 30px);
     font-size: 15px;
     color: #ffffff;
     transition: left 0.3s ease;
