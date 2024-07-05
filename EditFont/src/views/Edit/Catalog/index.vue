@@ -173,50 +173,58 @@ const handleNodeDrop = (draggingNode, dropNode, dropType) => {
   }
 };
 
-const handleNodeClick = (data) => {
+const handleNodeClick = async (data) => {
   store.editorisShow = false;
   store.setOpenNoteID(data.id);
-  let formdata = new FormData();
-  formdata.append("username", store.username);
-  axios({
-    method: 'post',
-    url: `${store.ipAddress}/api/pullNoteList`,
-    data: formdata,
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
-  }).then(res => {
-    for (let i = 0; i < res.data.noteList.length; i++) {
-    if (res.data.noteList[i][0] == store.openNoteID) {
-    const htmlContent = res.data.noteList[i][2];
-    store.setHTMLContent(htmlContent);
-    store.usedStyleID = res.data.noteList[i][3];
-    // alert(store.usedStyleID);
-    }
-    }
-  });
-
-  let formData = new FormData();
-  formData.append("username", store.username);
-  axios({
-    method: 'post',
-    url: `${store.ipAddress}/api/pullStyleList`,
-    data: formData,
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
-  }).then(res => {
-    for (let i = 0; i < res.data.styleList.length; i++) {
-    if (res.data.styleList[i][0] == store.usedStyleID) {
-    const StyleConfig = res.data.styleList[i][2];
-    store.setStyleConfig(JSON.parse(StyleConfig));
-    alert(JSON.stringify(store.stylesConfig, null, 2));
-    }
-    }
-  });
   
+  // 使用 await 确保第一个请求完成后再继续执行
+  try {
+    let formdata = new FormData();
+    formdata.append("username", store.username);
+    
+    const noteResponse = await axios({
+      method: 'post',
+      url: `${store.ipAddress}/api/pullNoteList`,
+      data: formdata,
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    
+    for (let i = 0; i < noteResponse.data.noteList.length; i++) {
+      if (noteResponse.data.noteList[i][0] == store.openNoteID) {
+        const htmlContent = noteResponse.data.noteList[i][2];
+        store.setHTMLContent(htmlContent);
+        store.usedStyleID = noteResponse.data.noteList[i][3];
+        break; // 找到匹配的Note后可以直接跳出循环
+      }
+    }
 
+    let formData = new FormData();
+    formData.append("username", store.username);
+    
+    const styleResponse = await axios({
+      method: 'post',
+      url: `${store.ipAddress}/api/pullStyleList`,
+      data: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    
+    for (let i = 0; i < styleResponse.data.styleList.length; i++) {
+      if (styleResponse.data.styleList[i][0] == store.usedStyleID) {
+        const StyleConfig = styleResponse.data.styleList[i][2];
+        store.setStyleConfig(JSON.parse(StyleConfig));
+
+        break; // 找到匹配的Style后可以直接跳出循环
+      }
+    }
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
 };
+
 
 
 const addFileWithoutRename = (fileId, fileName) => {
