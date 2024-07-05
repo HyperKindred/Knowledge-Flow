@@ -3,14 +3,14 @@
         <div class="title">
             <h2>文本翻译</h2>
         </div>
-        <div class="language-switcher">
-            <span class="left-language">中文</span>
-            <button class="switch-button" @click="switchLanguages">
-                <el-icon><Switch /></el-icon>
-            </button>
-            <span class="right-language">英文</span>
-        </div>
         <div class="text-item">
+            <div class="language-switcher">
+                <span class="left-language">中文</span>
+                <button class="switch-button" @click="switchLanguages">
+                    <el-icon><Switch /></el-icon>
+                </button>
+                <span class="right-language">英文</span>
+            </div>
             <textarea class="textarea" v-model="textarea" placeholder="输入文本"></textarea>
             <button class="translate-button" @click="translate">翻译</button>
             <textarea class="textarea" v-model="res" placeholder="翻译结果"></textarea>
@@ -117,12 +117,19 @@ const copy = async () => {
   flex: 2;
   text-align: center;
 }
+.text-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: calc(100% - 85.83px); 
+}
 .language-switcher {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 4%;
+    height: 10%;
     padding-bottom: 4%;
     padding: relative;
 }
@@ -139,13 +146,6 @@ const copy = async () => {
     font-size: 15px;
     color: #ffffff;
     transition: left 0.3s ease;
-}
-.text-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    height: 80%;
 }
 .textarea {
     resize: none;
@@ -164,7 +164,7 @@ const copy = async () => {
     padding: 0;
     width: 50px;
     height: 15px;
-    background-color: #222222;
+    background-color: #22222200;
     color: #919191;
     border: none;
     border-radius: 10px;
