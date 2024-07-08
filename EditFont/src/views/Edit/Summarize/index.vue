@@ -1,23 +1,28 @@
 <template>
     <div class="container">
-        <div class="title">
-            <h2>文本摘要</h2>
-        </div>
-        <div class="text-item">
-            <textarea class="textarea" v-model="res" placeholder="摘要结果"></textarea>
-            <button class="button" @click="copy">复制</button>
-        </div>
+            <div class="title">
+                <h2>文本摘要</h2>
+            </div>
+            <div class="text-item">
+                <div class="loadingarea">
+                    <Loading v-if="showLoading"/>
+                    <textarea class="textarea" v-model="res" placeholder="摘要结果"></textarea>
+                </div>
+                <button class="button" @click="copy">复制</button>
+            </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import axios from 'axios';
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElLoading } from 'element-plus';
 import { mainStore } from '@/store/index.ts';
+import Loading from '../../../components/Loading.vue'
 
 const res = ref('');
 const store = mainStore();
+const showLoading = ref(false);
 
 // 对选中文本进行摘要
 const summarizeSelected = (text) => {
@@ -41,12 +46,16 @@ const summarizeSelected = (text) => {
     .catch(error => {
         console.error('Error posting data:', error);
         ElMessage({message: '摘要失败：网络错误，请稍后重试！', type: 'error', duration: 5 * 1000, grouping: true});
+    })
+    .finally(() => {
+        stopLoading();
     });
 }
 
 // 监听摘要事件
 watch(() => store.select, (select) => {
     if (select === 'summarize') {
+        loading();
         summarizeSelected(store.content);
     }
 });
@@ -60,6 +69,14 @@ const copy = async () => {
         ElMessage({message: '复制失败，请重试! ', type: 'error', duration: 5 * 1000, grouping: true});
     }
 };
+
+const loading = () => {
+    showLoading.value = true;
+}
+
+const stopLoading = () => {
+    showLoading.value = false;
+}
 </script>
 
 <style scoped>
@@ -71,7 +88,7 @@ const copy = async () => {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #22222200;
+    background-color: #ffffff00;
 }
 .title {
     color: #ffffff;
@@ -80,27 +97,39 @@ const copy = async () => {
     align-items: center;
     padding-bottom: 10px;
 }
-
 .title h2 {
   flex: 2;
   text-align: center;
 }
 .text-item {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
+    height: calc(100% - 85.83px);
+}
+.loadingarea {
+    position: relative;
+    display: flex;
+    resize: none;
+    outline: none;
+    background-color: #333333;
+    color: #ffffff;
+    border: none;
+    width: 80%;
     height: 90%;
 }
 .textarea {
     resize: none;
     outline: none;
     background-color: #333333;
-    color:beige;
+    color: #ffffff;
     border: none;
     padding: 10px;
-    width: 80%;
-    height: 90%;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
     font-size: 20px;
     font-family: 'Arial';
 }
@@ -120,3 +149,4 @@ const copy = async () => {
     color: #818181;
 }
 </style>
+
