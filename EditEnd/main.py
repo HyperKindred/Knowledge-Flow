@@ -20,6 +20,7 @@ erniebot.access_token = "85f4055523d16301b7b9eac2816814cee81d1238"
 ocr = PaddleOCR(use_angle_cls=True, lang="ch")
 voice_predictor = PPASRPredictor(model_tag='conformer_streaming_fbank_wenetspeech')
 
+# 用户登录与注册
 @app.route('/api/signIn', methods=["GET", "POST"])
 def signIn():
     conn = pymysql.connect(
@@ -74,6 +75,7 @@ def signUp():
     conn.close()
     return jsonify(data)
 
+# 用户笔记数据库增删改查
 @app.route('/api/pullNoteList', methods=["GET", "POST"])
 def pullNoteList():
     conn = pymysql.connect(
@@ -94,9 +96,9 @@ def pullNoteList():
     result = cursor.fetchall()
     tables = [row[0] for row in result]
     if username.lower() not in tables:
-        sql = f"create table {username}(id int unsigned auto_increment, noteName text, content longtext, styleId int unsigned, primary key ( `id` ));"
+        sql = f"create table `{username}`(id int unsigned auto_increment, noteName text, content longtext, styleId int unsigned, primary key ( `id` ));"
         cursor.execute(sql)
-    cursor.execute(f"select * from {username};")
+    cursor.execute(f"select * from `{username}`;")
     result = cursor.fetchall()
     if result == ():
         data = {"ret": 1, "msg": "笔记为空！"}
@@ -123,13 +125,13 @@ def createNote():
     cursor = conn.cursor()
     cursor.execute("use KnowledgeFlow")
     try:
-        sql = f"insert into {username}(noteName, content, styleId) values('未命名页面', '开启知识之旅~', 1);"
+        sql = f"insert into `{username}`(noteName, content, styleId) values('未命名页面', '开启知识之旅~', 1);"
         cursor.execute(sql)
     except:
         data = {"ret": 1, "msg":"创建新页面失败！"}
         conn.close()
         return jsonify(data)
-    sql = f"select MAX(id) from {username}"
+    sql = f"select MAX(id) from `{username}`"
     cursor.execute(sql)
     id = cursor.fetchone()[0]
     data = {"ret": 0, "id":id}
@@ -155,13 +157,13 @@ def renameNote():
     cursor.execute("use KnowledgeFlow")
     id = request.form.get("id")
     noteName = request.form.get("noteName")
-    sql = f"select noteName from {username} where id = {int(id)};"    
+    sql = f"select noteName from `{username}` where id = {int(id)};"    
     cursor.execute(sql)
     result = cursor.fetchone()
     if result == None:
         data = {"ret": 1, "msg":"目标笔记不存在！"}
     else:
-        sql = f"update {username} set noteName = '{noteName}' where id = {int(id)};"
+        sql = f"update `{username}` set noteName = '{noteName}' where id = {int(id)};"
         cursor.execute(sql)
         data = {"ret": 0}
     cursor.close()
@@ -185,13 +187,13 @@ def delNote():
     cursor = conn.cursor()
     cursor.execute("use KnowledgeFlow")
     id = request.form.get("id")
-    sql = f"select noteName from {username} where id = {int(id)};"    
+    sql = f"select noteName from `{username}` where id = {int(id)};"    
     cursor.execute(sql)
     result = cursor.fetchone()
     if result == None:
         data = {"ret": 1, "msg":"目标笔记不存在！"}
     else:
-        sql = f"delete from {username} where id = {int(id)};"
+        sql = f"delete from `{username}` where id = {int(id)};"
         cursor.execute(sql)
         data = {"ret": 0}
     cursor.close()
@@ -217,21 +219,22 @@ def saveNote():
         return jsonify({"ret": 1, "msg": "用户名不存在！"})
     cursor = conn.cursor()
     cursor.execute("use KnowledgeFlow")
-    sql = f"select noteName from {username} where id = {int(id)};"    
+    sql = f"select noteName from `{username}` where id = {int(id)};"    
     cursor.execute(sql)
     result = cursor.fetchone()
     if result == None:
         data = {"ret": 1, "msg":"目标笔记不存在！"}
     else:
-        sql = f"update {username} set content = '{note}' where id = {int(id)};"
+        sql = f"update `{username}` set content = '{note}' where id = {int(id)};"
         cursor.execute(sql)
-        sql = f"update {username} set styleId = '{int(styleId)}' where id = {int(id)};"
+        sql = f"update `{username}` set styleId = '{int(styleId)}' where id = {int(id)};"
         cursor.execute(sql)
         data = {"ret": 0}
     cursor.close()
     conn.close()
     return jsonify(data)
 
+# 用户样式数据库增删改查
 @app.route('/api/pullStyleList', methods=["GET", "POST"])
 def pullStyleList():
     conn = pymysql.connect(
@@ -252,11 +255,11 @@ def pullStyleList():
     result = cursor.fetchall()
     tables = [row[0] for row in result]    
     if username.lower() not in tables:
-        sql = f"create table {username}(id int unsigned auto_increment, styleName text, style longtext, primary key ( `id` ));"
+        sql = f"create table `{username}`(id int unsigned auto_increment, styleName text, style longtext, primary key ( `id` ));"
         cursor.execute(sql)
-        sql = f"insert into {username}(styleName, style) values('默认样式', '{defaultStyle}');"
+        sql = f"insert into `{username}`(styleName, style) values('默认样式', '{defaultStyle}');"
         cursor.execute(sql)
-    cursor.execute(f"select * from {username};")
+    cursor.execute(f"select * from `{username}`;")
     result = cursor.fetchall()
     if result == ():
         data = {"ret": 1, "msg": "样式为空！"}
@@ -283,13 +286,13 @@ def createStyle():
     cursor = conn.cursor()
     cursor.execute("use KLFStyle")
     try:
-        sql = f"insert into {username}(styleName, style) values('默认样式', '{defaultStyle}');"
+        sql = f"insert into `{username}`(styleName, style) values('默认样式', '{defaultStyle}');"
         cursor.execute(sql)
     except:
         data = {"ret": 1, "msg":"创建新样式失败！"}
         conn.close()
         return jsonify(data)
-    sql = f"select MAX(id) from {username}"
+    sql = f"select MAX(id) from `{username}`"
     cursor.execute(sql)
     id = cursor.fetchone()[0]
     data = {"ret": 0, "id":id}
@@ -315,13 +318,13 @@ def renameStyle():
     cursor.execute("use KLFStyle")
     id = request.form.get("id")
     styleName = request.form.get("styleName")
-    sql = f"select styleName from {username} where id = {int(id)};"    
+    sql = f"select styleName from `{username}` where id = {int(id)};"    
     cursor.execute(sql)
     result = cursor.fetchone()
     if result == None:
         data = {"ret": 1, "msg":"目标样式不存在！"}
     else:
-        sql = f"update {username} set styleName = '{styleName}' where id = {int(id)};"
+        sql = f"update `{username}` set styleName = '{styleName}' where id = {int(id)};"
         cursor.execute(sql)
         data = {"ret": 0}
     cursor.close()
@@ -345,13 +348,13 @@ def delStyle():
     cursor = conn.cursor()
     cursor.execute("use KLFStyle")
     id = request.form.get("id")
-    sql = f"select styleName from {username} where id = {int(id)};"    
+    sql = f"select styleName from `{username}` where id = {int(id)};"    
     cursor.execute(sql)
     result = cursor.fetchone()
     if result == None:
         data = {"ret": 1, "msg":"目标样式不存在！"}
     else:
-        sql = f"delete from {username} where id = {int(id)};"
+        sql = f"delete from `{username}` where id = {int(id)};"
         cursor.execute(sql)
         data = {"ret": 0}
     cursor.close()
@@ -376,19 +379,20 @@ def saveStyle():
         return jsonify({"ret": 1, "msg": "用户名不存在！"})
     cursor = conn.cursor()
     cursor.execute("use KLFStyle")
-    sql = f"select styleName from {username} where id = {int(id)};"    
+    sql = f"select styleName from `{username}` where id = {int(id)};"    
     cursor.execute(sql)
     result = cursor.fetchone()
     if result == None:
         data = {"ret": 1, "msg":"目标样式不存在！"}
     else:
-        sql = f"update {username} set style = '{style}' where id = {int(id)};"
+        sql = f"update `{username}` set style = '{style}' where id = {int(id)};"
         cursor.execute(sql)
         data = {"ret": 0}
     cursor.close()
     conn.close()
     return jsonify(data)
 
+# 大模型功能，摘要、润色、翻译、病句改写
 @app.route('/api/summarize', methods=["GET", "POST"])
 def summarize():
     text = request.form.get("text")
@@ -430,9 +434,9 @@ def translate():
     mode = request.form.get("mode")
     mode = int(mode)
     if mode == 0:
-        askcont="中译英（结果前添加“输出：”）："+text
+        askcont="中译英（格式要求结果前添加“输出：”）："+text
     elif mode == 1:
-        askcont="英译中（结果前添加“输出：”）："+text
+        askcont="英译中（格式要求结果前添加“输出：”）："+text
     else:
         data = {"ret": 1, "msg":"翻译模式错误！"}
         return jsonify(data)
@@ -472,6 +476,7 @@ def correct():
         data = {"ret": 1, "msg":"模型调用失败！"}
     return jsonify(data)
 
+# OCR模型，识别图片文字内容
 @app.route('/api/img2word', methods=["GET", "POST"])
 def img2word():
     res = ""
@@ -501,6 +506,7 @@ def img2word():
     data = {"ret":0, "res":res}
     return jsonify(data)
 
+# ASR模型，识别语音文字内容
 @app.route('/api/voice2word', methods=["GET", "POST"])
 def voice2word():
     username = request.form.get("username")
@@ -527,6 +533,7 @@ def voice2word():
     data = {"ret":0, "res":res}
     return jsonify(data)
 
+# 一键生成格式
 @app.route('/api/autoFormat', methods=["GET", "POST"])
 def autoFormat():
     text = request.form.get("text")
@@ -548,6 +555,7 @@ def autoFormat():
         data = {"ret": 1, "msg":"模型调用失败！"}
     return jsonify(data)
 
+# 文本导出思维导图
 @app.route('/api/autoMindmap', methods=["GET", "POST"])
 def autoMindmap():
     res = ""
