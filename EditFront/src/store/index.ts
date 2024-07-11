@@ -13,7 +13,7 @@ import { Extension } from '@tiptap/core';
 
 export const mainStore = defineStore('main', {
   state: () => ({
-    ipAddress: 'http://10.19.130.215:5000',
+    ipAddress: 'http://192.168.1.49:5000',
     isShow: false,
     editorisShow: false,
     openStyleID: null,
@@ -26,6 +26,7 @@ export const mainStore = defineStore('main', {
     select: null,
     headings: [],
     background: "night_background",
+    theme: localStorage.getItem('theme') || 'light',
     stylesConfig: {
       heading: {
         1: {
@@ -196,6 +197,19 @@ export const mainStore = defineStore('main', {
     setUsername(username: string) {
       this.username = username
     },
+    toggleTheme() {
+      this.theme = this.theme === 'light' ? 'dark' : 'dark';
+      document.documentElement.setAttribute('theme', this.theme);
+      localStorage.setItem('theme', this.theme);
+    },
+    setTheme(theme: string) {
+      this.theme = theme;
+      document.documentElement.setAttribute('theme', theme);
+      localStorage.setItem('theme', theme);
+    },
+    initializeTheme() {
+      document.documentElement.setAttribute('theme', this.theme);
+    }
   },
 });
 
