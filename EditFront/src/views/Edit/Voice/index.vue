@@ -11,7 +11,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { mainStore } from '@/store';
 
@@ -23,7 +23,7 @@ const responseText = ref<string | null>(null);
   const triggerFileInput = () => {
   fileInput.value?.click();
 };
-
+const theme = ref('')
 const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement;
   if (target.files) {
@@ -54,6 +54,11 @@ const uploadimg = () => {
     }
   });
 };
+
+onMounted(() => {
+  store.initializeTheme();
+  theme.value = store.theme;
+});
 </script>
   
 <style scoped>
@@ -67,6 +72,7 @@ const uploadimg = () => {
   .add-file h2 {
   flex: 2;
   text-align: center;
+  color: var(--titleColor)
 }
 
   .add-file svg {
@@ -78,6 +84,7 @@ const uploadimg = () => {
     margin-left: auto;
     margin-right: 20px;
     cursor: pointer;
+    filter: invert(var(--invert));
   }
   .content {
   width: auto;

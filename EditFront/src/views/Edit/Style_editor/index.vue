@@ -112,7 +112,7 @@ import { useEditorStore } from '../../../router/index.ts';
 import axios from 'axios';
 import { mainStore } from '@/store/index.ts';
 const store = mainStore();
-
+const theme = ref('')
 const stylesConfig = computed(() => store.stylesConfig);
 
 const fontSizes = ['12', '14', '16', '18', '20', '22', '24', '26', '28', '30'];
@@ -173,9 +173,9 @@ const saveStyleConfig = () => {
 }
 
 .saveStyle {
-  background-color: rgba(50, 50, 50, 0.877);
-  color: beige;
-  border: 1.5px solid beige;
+  background-color: var(--btnColor);
+  color: var(--titleColor);
+  border: 1.5px solid var(--titleColor);
   margin-right: 20px;
   margin-left: auto;
 }
@@ -192,7 +192,7 @@ const saveStyleConfig = () => {
   flex-direction: column;
   overflow-y: scroll;
   height: 700px;
-  background-color: rgba(79, 79, 79, 0.687);
+  background-color: var(--editorColor);
 }
 
 .editor-group {

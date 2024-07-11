@@ -1,6 +1,6 @@
 <template>
   <div class="EditMain" ref="filecont" >
-    <img class="background" src="@/assets/images/night_background.jpg">
+    <img class="background" :src=currentImage />
     <div class="lefttools">
       <div class="lefttop">
         <img :src="misakaImg" alt="Misaka Mikoto">
@@ -8,7 +8,7 @@
       </div>
       <div class="leftlist">
         <svg @click="navigateTo('Catalog')" id="Catalog" t="1719471435071" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="18790" width="200" height="200"><path d="M867.995 459.647h-711.99c-27.921 0-52.353 24.434-52.353 52.353s24.434 52.353 52.353 52.353h711.99c27.921 0 52.353-24.434 52.353-52.353s-24.434-52.353-52.353-52.353z" p-id="18791" fill="#bfbfbf"></path><path d="M867.995 763.291h-711.99c-27.921 0-52.353 24.434-52.353 52.353s24.434 52.353 52.353 52.353h711.99c27.921 0 52.353-24.434 52.353-52.353s-24.434-52.353-52.353-52.353z" p-id="18792" fill="#bfbfbf"></path><path d="M156.005 260.709h711.99c27.921 0 52.353-24.434 52.353-52.353s-24.434-52.353-52.353-52.353h-711.99c-27.921 0-52.353 24.434-52.353 52.353s24.434 52.353 52.353 52.353z" p-id="18793" fill="#bfbfbf"></path>
-          <title class="tooltip">目录</title>
+          <desc class="tooltip">目录</desc>
         </svg>
         <svg @click="navigateTo('Outline')" id="Outline" t="1719471418244" class="icon" viewBox="0 0 1126 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2304" width="200" height="200"><path d="M142.234 0a142.234 142.234 0 0 1 56.883 272.589v210.944h113.715c15.718 0 28.467 12.8 28.467 28.467v56.883a28.467 28.467 0 0 1-28.467 28.467H199.168v263.117c0 16.538 3.43 31.488 8.704 42.087l2.048 3.686a34.1 34.1 0 0 0 1.894 2.918l0.87 1.024h100.148c15.718 0 28.467 12.8 28.467 28.468v56.883A28.467 28.467 0 0 1 312.832 1024H207.258c-72.807 0-119.399-73.267-121.856-156.774l-0.052-6.759V272.59A142.234 142.234 0 0 1 142.182 0z m886.988 853.35a51.2 51.2 0 0 1 51.2 51.2v68.25a51.2 51.2 0 0 1-51.2 51.2H562.79a51.2 51.2 0 0 1-51.2-51.2v-68.25a51.2 51.2 0 0 1 51.2-51.2h466.432z m0-398.233a51.2 51.2 0 0 1 51.2 51.2v68.25a51.2 51.2 0 0 1-51.2 51.2H562.79a51.2 51.2 0 0 1-51.2-51.2v-68.199a51.2 51.2 0 0 1 51.2-51.2h466.432z m0-398.234a51.2 51.2 0 0 1 51.2 51.2v68.25a51.2 51.2 0 0 1-51.2 51.2H562.79a51.2 51.2 0 0 1-51.2-51.2v-68.25a51.2 51.2 0 0 1 51.2-51.2h466.432z" fill="#bfbfbf" p-id="2305"></path>
           <title class="tooltip">大纲</title>
@@ -39,13 +39,13 @@
         <div class="toptools">
           <EditorMenu :editor="editor" />
           <div class="topBtn">
-            <button class="topButton" @click="autoFormat()">思维导图</button>
+          <button class="topButton" @click="toggleTheme()">昼夜切换</button>
+          <button class="topButton" @click="autoFormat()">思维导图</button>
           <button class="topButton" @click="autoFormat()">格式化</button>
           <button class="topButton" @click="saveHTMLText()">Save</button>
         </div>
         </div>
         <div class="editcont">
-          <Loading v-if="showLoading"/>
           <ContextMenu>
           <EditorContent @mousescroll="" @mousedown="" @mousemove=""
             @mouseup="selecttext($event)" style="padding: 8px;" :editor="editor" />
@@ -73,12 +73,11 @@
 </template>
 <script lang="ts" setup>
 import { Brush, EditPen, } from '@element-plus/icons-vue'
-import { defineComponent, onMounted, onBeforeUnmount, ref, watch } from 'vue';
+import { defineComponent, onMounted, onBeforeUnmount, ref, watch, computed } from 'vue';
 import { Editor, EditorContent, useEditor, BubbleMenu } from '@tiptap/vue-3';
 import { storeToRefs } from 'pinia'
 import Underline from '@tiptap/extension-underline'
 import ContextMenu from '../../components/ContextMenu.vue'
-import Loading from '../../components/Loading.vue'
 // 列表
 import ListItem from '@tiptap/extension-list-item'
 import OrderedList from '@tiptap/extension-ordered-list'
@@ -117,10 +116,14 @@ import axios from 'axios'
 import { useRouter } from 'vue-router';
 import { mainStore } from '../../store/index.ts';
 import { Extension } from '@tiptap/core'
+
+import lightImage from '@/assets/images/light_background.jpg';
+import darkImage from '@/assets/images/dark_background.jpg';
 const router = useRouter();
 const lowlight = createLowlight()
 lowlight.register({ html, ts, css, js })
-
+const editorStore = useEditorStore()
+const store = mainStore();
 const aipolish = ref("")
 const filecont = ref(null);
 const aicontinuation = ref("")
@@ -129,8 +132,8 @@ const position = ref({
   top: 0,
   left: 0
 })
+const theme = ref('')
 const editorContent = ref('');
-const showLoading = ref(false);
 
 
 function navigateTo(componentName) {
@@ -149,6 +152,14 @@ function navigateTo(componentName) {
     }
   });
 }
+onMounted(() => {
+  store.initializeTheme();
+  theme.value = store.theme;
+});
+
+const currentImage = computed(() => {
+  return store.theme === 'light' ? lightImage : darkImage;
+});
 
 const ExtendedStyle = Extension.create({
   name: 'extendedStyle',
@@ -185,8 +196,7 @@ const ExtendedStyle = Extension.create({
 
 
 
-const editorStore = useEditorStore()
-const store = mainStore();
+
 
 
 
@@ -302,9 +312,6 @@ const polishSelected=(text)=>{
     .catch(error => {
         console.error('Error posting data:', error);
         ElMessage({message: '润色失败：网络错误，请稍后重试！', type: 'error', duration: 5 * 1000, grouping: true});
-    })
-    .finally(() => {
-        stopLoading();
     });
 }
 
@@ -330,9 +337,6 @@ const correctSelected=(text)=>{
     .catch(error => {
         console.error('Error posting data:', error);
         ElMessage({message: '修改失败：网络错误，请稍后重试！', type: 'error', duration: 5 * 1000, grouping: true});
-    })
-    .finally(() => {
-        stopLoading();
     });
 }
 
@@ -343,7 +347,7 @@ const deleteSelected = () => {
 
 // 复制函数
 const copySelected = () => {
-    navigator.clipboard.writeText(store.content);
+    navigator.clipboard.writeText(contentStore.content);
 }
 
 // 粘贴函数
@@ -352,15 +356,16 @@ const pasteSelected = (text) => {
         editor.value.chain().focus().deleteSelection().insertContent(clipText).run();
     });
 }
+const toggleTheme = () => {
+  store.toggleTheme();
+};
 
 // 监听菜单事件
 watch(() => store.select, (select) => {
     if (select === 'polish') {
-        loading();
         polishSelected(store.content);
     }
     if (select === 'correct') {
-        loading();
         correctSelected(store.content);
     }
     if (select === 'delete') {
@@ -373,14 +378,6 @@ watch(() => store.select, (select) => {
         pasteSelected(store.content);
     }
 });
-
-const loading = () => {
-    showLoading.value = true;
-}
-
-const stopLoading = () => {
-    showLoading.value = false;
-}
 </script>
 <style>
 .EditMain {
@@ -416,7 +413,7 @@ const stopLoading = () => {
   position: relative;
   display: flex;
   align-items: center;
-  background-color: rgba(44, 43, 43, 0.6);
+  background-color: var(--backgroundColor);
   width: 95%;
   height: 90%;
   left: 2.5%;
@@ -440,13 +437,14 @@ const stopLoading = () => {
 .username-display {
   padding-left: 5%;
   margin: 0; 
+  color: var(--titleColor);
 }
 .leftlist{
   position: relative;
   display: flex;
   align-items: center; 
   justify-content: center; 
-  background-color: rgba(44, 43, 43, 0.6);
+  background-color: var(--backgroundColor);
   width: 95%;
   height: 100%;
   left: 2.5%;
@@ -461,13 +459,14 @@ const stopLoading = () => {
   max-height: 40%;
   object-fit: contain;
   cursor: pointer;
+  filter: invert(var(--invert));
 }
 
 
 
 .toolBar {
   position: relative;
-  background-color: rgba(44, 43, 43, 0.6);
+  background-color: var(--backgroundColor);
   width: 95%;
   height: 100%;
   left: 2.5%;
@@ -497,7 +496,7 @@ const stopLoading = () => {
 
 .toptools {
   display: flex;
-  background-color: rgba(106, 106, 106, 0.386);
+  background-color: var(--toptools);
   border-bottom: 1px dashed #9ca19f65;
 }
 
@@ -509,9 +508,9 @@ const stopLoading = () => {
   margin-left: auto;
 }
 .topButton {
-  background-color: rgba(50, 50, 50, 0.877);
-  color: beige;
-  border: 1.5px solid beige;
+  background-color: var(--btnColor);
+  color: var(--titleColor);
+  border: 1.5px solid var(--titleColor);
   max-height: 100%;
   margin-right: 5px;
 }
@@ -519,7 +518,7 @@ const stopLoading = () => {
 
 
 .bottomcount {
-  background-color: rgba(35, 35, 35, 0.913);
+  background-color: var(--countColor);
   border-top: 5px;
   height: 100%;
   width: 100%;
@@ -536,7 +535,7 @@ const stopLoading = () => {
   width: 100%;
   overflow-y: auto;
   object-fit: contain;
-  background-color: rgba(41, 41, 41, 0.687);
+  background-color: var(--editorColor);
 }
 
 

@@ -1,29 +1,24 @@
 <template>
     <div class="container">
-            <div class="title">
-                <h2>文本摘要</h2>
-            </div>
-            <div class="text-item">
-                <div class="loadingarea">
-                    <Loading v-if="showLoading"/>
-                    <textarea class="textarea" v-model="res" placeholder="摘要结果"></textarea>
-                </div>
-                <button class="button" @click="copy">复制</button>
-            </div>
+        <div class="title">
+            <h2>文本摘要</h2>
+        </div>
+        <div class="text-item">
+            <textarea class="textarea" v-model="res" placeholder="摘要结果"></textarea>
+            <button class="button" @click="copy">复制</button>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import axios from 'axios';
-import { ElMessage, ElLoading } from 'element-plus';
+import { ElMessage } from 'element-plus';
 import { mainStore } from '@/store/index.ts';
-import Loading from '../../../components/Loading.vue'
 
 const res = ref('');
 const store = mainStore();
-const showLoading = ref(false);
-
+const theme = ref('')
 // 对选中文本进行摘要
 const summarizeSelected = (text) => {
     let formData = new FormData();
@@ -46,16 +41,12 @@ const summarizeSelected = (text) => {
     .catch(error => {
         console.error('Error posting data:', error);
         ElMessage({message: '摘要失败：网络错误，请稍后重试！', type: 'error', duration: 5 * 1000, grouping: true});
-    })
-    .finally(() => {
-        stopLoading();
     });
 }
 
 // 监听摘要事件
 watch(() => store.select, (select) => {
     if (select === 'summarize') {
-        loading();
         summarizeSelected(store.content);
     }
 });
@@ -70,13 +61,10 @@ const copy = async () => {
     }
 };
 
-const loading = () => {
-    showLoading.value = true;
-}
-
-const stopLoading = () => {
-    showLoading.value = false;
-}
+onMounted(() => {
+  store.initializeTheme();
+  theme.value = store.theme;
+});
 </script>
 
 <style scoped>
@@ -88,65 +76,53 @@ const stopLoading = () => {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #ffffff00;
+    background-color: var(--backgroudColor);
 }
 .title {
-    color: #ffffff;
+    color: var(--titleColor);
     position: relative;
     display: flex;
     align-items: center;
     padding-bottom: 10px;
 }
+
 .title h2 {
   flex: 2;
   text-align: center;
 }
 .text-item {
-    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
-    height: calc(100% - 85.83px);
-}
-.loadingarea {
-    position: relative;
-    display: flex;
-    resize: none;
-    outline: none;
-    background-color: #333333;
-    color: #ffffff;
-    border: none;
-    width: 80%;
     height: 90%;
 }
 .textarea {
     resize: none;
     outline: none;
-    background-color: #333333;
-    color: #ffffff;
+    background-color: var(--btnColor);
+    color:var(--textColor);
     border: none;
     padding: 10px;
-    box-sizing: border-box;
-    width: 100%;
-    height: 100%;
+    width: 80%;
+    height: 90%;
     font-size: 20px;
     font-family: 'Arial';
 }
 .button {
     margin: 10px;
-    background-color: #303030;
-    color: #919191;
+    background-color: var(--btnColor);
+    color: var(--textColor);
     border: none;
     border-radius: 10px;
     outline: none;
     cursor: pointer;
     position: relative;
     left: 29%;
+    border: 1.5px solid var(--titleColor);
 }
 .button:hover {
     background-color: #b2b2b2;
-    color: #818181;
+    color: var(--textColor);
 }
 </style>
-

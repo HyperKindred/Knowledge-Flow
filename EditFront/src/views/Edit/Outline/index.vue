@@ -21,10 +21,11 @@
 <script setup lang="ts">
 import { mainStore } from '@/store'; // Import from correct path
 import { storeToRefs } from 'pinia';
+import { onMounted, ref } from 'vue';
 
 const store = mainStore();
 const { headings } = storeToRefs(store);
-
+const theme = ref('')
 /**
  * 左侧区域
  */
@@ -36,6 +37,11 @@ const setActiveHeading = (data: string) => {
 const handleHeadingClick = (data: string) => {
   setActiveHeading(data);
 }
+
+onMounted(() => {
+  store.initializeTheme();
+  theme.value = store.theme;
+});
 </script>
 
 <style scoped lang="scss">
@@ -44,7 +50,7 @@ const handleHeadingClick = (data: string) => {
   opacity: 0.75;
   border-radius: 0.5rem;
   padding: 0.75rem;
-  background: rgba(black, 0.1);
+  background: var(--backgroundColor);
 
   &__list {
     list-style: none;
@@ -84,6 +90,7 @@ const handleHeadingClick = (data: string) => {
   display: flex;
   align-items: center; 
   justify-content: center; 
+  color: var(--titleColor);
 }
 
 .el-button {
@@ -95,6 +102,6 @@ const handleHeadingClick = (data: string) => {
 .outline__item{
   display: flex;
   justify-content: left;
-  color: azure;
+  color: var(--titleColor);
 }
 </style>

@@ -75,7 +75,7 @@ import { mainStore } from '@/store/index.ts';
 const treeData = ref([
 
 ]);
-
+const theme = ref('')
 const defaultProps = {
   children: 'children',
   label: 'label'
@@ -258,7 +258,10 @@ onBeforeMount(() => {
   });
 });
 
-
+onMounted(() => {
+  store.initializeTheme();
+  theme.value = store.theme;
+});
 
 function showStyleEditor(data) {
   store.setOpenStyleID(data.id);
@@ -293,13 +296,14 @@ function showStyleEditor(data) {
   justify-content: center;
   align-items: center;
   margin-bottom: 10px;
-  background-color: rgba(32, 32, 32, 0);
+  background-color: var(--backgroudColor);
 }
 
 
 .add-style h2 {
   flex: 2;
   text-align: center;
+  color: var(--titleColor);
 }
 .add-style svg {
   max-width: 6%;
@@ -310,6 +314,7 @@ function showStyleEditor(data) {
   margin-left: auto;
   margin-right: 20px;
   cursor: pointer;
+  filter: invert(var(--invert));
 }
 
 .content {
@@ -320,9 +325,9 @@ function showStyleEditor(data) {
 }
 
 .el-tree {
-  border: 1px solid rgba(207, 220, 245, 0);
-  background-color: rgba(207, 220, 245, 0);
-  color: beige;
+  border: 1px solid var(--treeColor);
+  background-color: var(--treeColor);
+  color: var(--titleColor);
   border-radius: 10px;
   padding: 10px;
   max-height: 480px;
@@ -355,7 +360,7 @@ function showStyleEditor(data) {
 }
 
 :deep().el-input>.el-input__wrapper>.el-input__inner {
-  color: white;
+  color: var(btnColor);
 }
 
 
@@ -393,6 +398,7 @@ function showStyleEditor(data) {
   margin-right: 5px;
   margin-left: 0px;
   cursor: pointer;
+  filter: invert(var(--invert));
 }
 
 .rename {
@@ -401,6 +407,7 @@ function showStyleEditor(data) {
   margin-right: 0px;
   margin-left: 0px;
   cursor: pointer;
+  filter: invert(var(--invert));
 }
 
 .editing {
@@ -409,5 +416,6 @@ function showStyleEditor(data) {
   margin-right: 6px;
   margin-left: 0px;
   cursor: pointer;
+  filter: invert(var(--invert));
 }
 </style>

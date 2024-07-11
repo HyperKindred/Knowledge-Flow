@@ -51,7 +51,7 @@ import { useEditorStore } from '../../../router/index.ts'
 import axios from 'axios';
 import { mainStore } from '@/store/index.ts';
 const treeData = ref([]);
-
+const theme = ref('')
 const defaultProps = {
   children: 'children',
   label: 'label'
@@ -90,6 +90,9 @@ const newFile = () => {
     if (res.data.ret == 0) {
       let name = '未命名页面';
       addFile(res.data.id, name);
+    }
+    else {
+      alert(res.data.msg);
     }
   });
 
@@ -256,6 +259,11 @@ onBeforeMount(() => {
   });
 });
 
+onMounted(() => {
+  store.initializeTheme();
+  theme.value = store.theme;
+});
+
 
 
 function showEditorCard() {
@@ -278,6 +286,7 @@ function showEditorCard() {
 .add-file h2 {
   flex: 2;
   text-align: center;
+  color: var(--titleColor);
 }
 
 .add-file svg {
@@ -289,6 +298,7 @@ function showEditorCard() {
   margin-left: auto;
   margin-right: 20px;
   cursor: pointer;
+  filter: invert(var(--invert));
 }
 
 .content {
@@ -299,9 +309,9 @@ function showEditorCard() {
 }
 
 .el-tree {
-  border: 1px solid rgba(207, 220, 245, 0);
-  background-color: rgba(207, 220, 245, 0);
-  color: beige;
+  border: 1px solid  var(--treeColor);
+  background-color: var(--treeColor);
+  color: var(--titleColor);
   border-radius: 10px;
   padding: 10px;
   max-height: 480px;
@@ -334,7 +344,7 @@ function showEditorCard() {
 }
 
 :deep().el-input>.el-input__wrapper>.el-input__inner {
-  color: white;
+  color: var(--btnColor);
 }
 
 
@@ -372,6 +382,7 @@ function showEditorCard() {
   margin-right: 5px;
   margin-left: 20px;
   cursor: pointer;
+  filter: invert(var(--invert));
 }
 
 .rename {
@@ -380,5 +391,6 @@ function showEditorCard() {
   margin-right: 0px;
   margin-left: 0px;
   cursor: pointer;
+  filter: invert(var(--invert));
 }
 </style>

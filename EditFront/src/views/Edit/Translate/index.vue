@@ -30,7 +30,7 @@ const textarea = ref('');
 const res = ref('');
 const store = mainStore();
 const mode = ref('0');
-
+const theme = ref('')
 const switchLanguages = () => {
     if (mode.value === '0') {
         document.querySelector('.left-language').style.left = 'calc(65% - 30px)';
@@ -94,6 +94,11 @@ const copy = async () => {
         ElMessage({message: '复制失败，请重试! ', type: 'error', duration: 5 * 1000, grouping: true});
     }
 };
+
+onMounted(() => {
+  store.initializeTheme();
+  theme.value = store.theme;
+});
 </script>
 
 <style scoped>
@@ -103,10 +108,10 @@ const copy = async () => {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #ffffff00;
+    background-color: var(--backgroundColor);
 }
 .title {
-    color: #ffffff;
+    color: var(--titleColor);
     position: relative;
     display: flex;
     align-items: center;
@@ -137,57 +142,59 @@ const copy = async () => {
     position: absolute;
     left: 35%;
     font-size: 15px;
-    color: #ffffff;
+    color: var(--textColor);
     transition: left 0.3s ease;
 }
 .right-language {
     position: absolute;
     left: calc(65% - 30px);
     font-size: 15px;
-    color: #ffffff;
+    color:  var(--textColor);
     transition: left 0.3s ease;
 }
 .textarea {
     resize: none;
     outline: none;
-    background-color: #333333;
-    color: #ffffff;
+    background-color: var(--btnColor);
+    color:  var(--textColor);
     border: none;
     padding: 10px;
     width: 70%;
     height: 40%;
     font-size: 20px;
     font-family: 'Arial';
+    border-radius: 10px;
 }
 .switch-button {
     margin: 15px;
     padding: 0;
     width: 50px;
     height: 15px;
-    background-color: #22222200;
-    color: #919191;
+    background-color: rgba(0,0,0,0);
+    color: var(--textColor);
     border: none;
     border-radius: 10px;
     outline: none;
     cursor: pointer;
 }
 .switch-button:hover {
-    background-color: #222222;
+    background-color: rgba(0,0,0,0);
     color: #6d6d6d;
 }
 .translate-button {
     margin: 10px;
-    background-color: #303030;
-    color: #919191;
+    background-color: var(--btnColor);
+    color: var(--textColor);
     border: none;
     border-radius: 10px;
     outline: none;
     cursor: pointer;
     position: relative;
     left: 29%;
+    border: 1.5px solid var(--titleColor);
 }
 .translate-button:hover {
     background-color: #b2b2b2;
-    color: #818181;
+    color: var(--textColor);
 }
 </style>

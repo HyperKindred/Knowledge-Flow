@@ -25,11 +25,20 @@
 import NinestateImg from '@/assets/images/Ninestate.jpg';
 import HypercubeImg from '@/assets/images/Hypercube.jpg';
 import FeBlueImg from '@/assets/images/FeBlue.jpg';
+import { ref, onMounted } from 'vue';
+import { mainStore } from '@/store';
+const store = mainStore();
 const authors = [
   { name: '@Ninestate', img: NinestateImg },
   { name: '@Hypercube', img: HypercubeImg },
   { name: '@FeBlue', img: FeBlueImg }
 ];
+const theme = ref('')
+
+onMounted(() => {
+  store.initializeTheme();
+  theme.value = store.theme;
+});
 </script>
 
 <style scoped>
@@ -51,7 +60,7 @@ const authors = [
 
 .welcome-text {
   text-align: center;
-  color: beige;
+  color: var(--titleColor);
 }
 
 .button {
@@ -64,7 +73,7 @@ const authors = [
   left: 0;
   right: 0;
   padding: 10px 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--authorColor);
 }
 
 .author {
@@ -92,11 +101,12 @@ const authors = [
   width: auto;
   border-radius: 50%;
   margin-right: 10px;
+  filter: invert(var(--invert));
 }
 
 .author h3 {
   margin: 0;
-  color: white;
+  color: var(--textColor);
 }
 
 .top {
@@ -109,6 +119,6 @@ const authors = [
 
 .top h4 {
   margin: 0;
-  color: white;
+  color: var(--textColor);
 }
 </style>
