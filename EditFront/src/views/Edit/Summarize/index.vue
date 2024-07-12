@@ -4,7 +4,10 @@
             <h2>文本摘要</h2>
         </div>
         <div class="text-item">
-            <textarea class="textarea" v-model="res" placeholder="摘要结果"></textarea>
+            <div class="loadingarea">
+                <Loading v-if="showLoading"/>
+                <textarea class="textarea" v-model="res" placeholder="摘要结果"></textarea>
+            </div>
             <button class="button" @click="copy">复制</button>
         </div>
     </div>
@@ -15,10 +18,13 @@ import { ref, watch, onMounted } from 'vue';
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
 import { mainStore } from '@/store/index.ts';
+import Loading from '../../../components/Loading.vue'
 
 const res = ref('');
 const store = mainStore();
 const theme = ref('')
+const showLoading = ref(false);
+
 // 对选中文本进行摘要
 const summarizeSelected = (text) => {
     let formData = new FormData();
@@ -41,12 +47,16 @@ const summarizeSelected = (text) => {
     .catch(error => {
         console.error('Error posting data:', error);
         ElMessage({message: '摘要失败：网络错误，请稍后重试！', type: 'error', duration: 5 * 1000, grouping: true});
+    })
+    .finally(() => {
+        stopLoading();
     });
 }
 
 // 监听摘要事件
 watch(() => store.select, (select) => {
     if (select === 'summarize') {
+        loading();
         summarizeSelected(store.content);
     }
 });
@@ -65,6 +75,14 @@ onMounted(() => {
   store.initializeTheme();
   theme.value = store.theme;
 });
+
+const loading = () => {
+    showLoading.value = true;
+}
+
+const stopLoading = () => {
+    showLoading.value = false;
+}
 </script>
 
 <style scoped>
@@ -97,6 +115,17 @@ onMounted(() => {
     width: 100%;
     height: 90%;
 }
+.loadingarea {
+    position: relative;
+    display: flex;
+    resize: none;
+    outline: none;
+    background-color: #333333;
+    color: #ffffff;
+    border: none;
+    width: 80%;
+    height: 90%;
+}
 .textarea {
     resize: none;
     outline: none;
@@ -104,8 +133,9 @@ onMounted(() => {
     color:var(--textColor);
     border: none;
     padding: 10px;
-    width: 80%;
-    height: 90%;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
     font-size: 20px;
     font-family: 'Arial';
 }
