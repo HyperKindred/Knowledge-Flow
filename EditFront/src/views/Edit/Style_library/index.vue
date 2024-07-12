@@ -336,12 +336,12 @@ function showStyleEditor(data) {
 }
 
 :deep().el-tree>.el-tree-node>.el-tree-node__content:hover {
-  background-color: rgba(175, 175, 175, 0.733);
+  background-color: var(--hoverColor);
   border-radius: 5px;
 }
 
 :deep().el-tree>.el-tree-node.is-current>.el-tree-node__content {
-  background-color: rgba(134, 134, 134, 0.683);
+  background-color: var(--currentColor);
   border-radius: 5px;
 
 }
