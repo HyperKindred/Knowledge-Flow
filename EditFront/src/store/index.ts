@@ -13,7 +13,7 @@ import { Extension } from '@tiptap/core';
 
 export const mainStore = defineStore('main', {
   state: () => ({
-    ipAddress: 'http://192.168.1.49:5000',
+    ipAddress: 'http://123.57.215.19:5000',
     isShow: false,
     editorisShow: false,
     openStyleID: null,
