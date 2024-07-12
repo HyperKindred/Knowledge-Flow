@@ -197,11 +197,12 @@ export const mainStore = defineStore('main', {
     setUsername(username: string) {
       this.username = username
     },
-    toggleTheme() {
-      this.theme = this.theme === 'light' ? 'dark' : 'dark';
-      document.documentElement.setAttribute('theme', this.theme);
-      localStorage.setItem('theme', this.theme);
-    },
+toggleTheme() {
+  this.theme = this.theme === 'light' ? 'dark' : 'light';
+  document.documentElement.setAttribute('theme', this.theme);
+  localStorage.setItem('theme', this.theme);
+},
+
     setTheme(theme: string) {
       this.theme = theme;
       document.documentElement.setAttribute('theme', theme);
