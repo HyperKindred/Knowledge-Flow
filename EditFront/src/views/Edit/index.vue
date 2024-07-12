@@ -46,6 +46,7 @@
         </div>
         </div>
         <div class="editcont">
+          <Loading v-if="showLoading"/>
           <ContextMenu>
           <EditorContent @mousescroll="" @mousedown="" @mousemove=""
             @mouseup="selecttext($event)" style="padding: 8px;" :editor="editor" />
@@ -78,6 +79,7 @@ import { Editor, EditorContent, useEditor, BubbleMenu } from '@tiptap/vue-3';
 import { storeToRefs } from 'pinia'
 import Underline from '@tiptap/extension-underline'
 import ContextMenu from '../../components/ContextMenu.vue'
+import Loading from '../../components/Loading.vue'
 // 列表
 import ListItem from '@tiptap/extension-list-item'
 import OrderedList from '@tiptap/extension-ordered-list'
@@ -134,6 +136,7 @@ const position = ref({
 })
 const theme = ref('')
 const editorContent = ref('');
+const showLoading = ref(false);
 
 
 function navigateTo(componentName) {
@@ -312,6 +315,9 @@ const polishSelected=(text)=>{
     .catch(error => {
         console.error('Error posting data:', error);
         ElMessage({message: '润色失败：网络错误，请稍后重试！', type: 'error', duration: 5 * 1000, grouping: true});
+    })
+    .finally(() => {
+        stopLoading();
     });
 }
 
@@ -337,6 +343,9 @@ const correctSelected=(text)=>{
     .catch(error => {
         console.error('Error posting data:', error);
         ElMessage({message: '修改失败：网络错误，请稍后重试！', type: 'error', duration: 5 * 1000, grouping: true});
+    })
+    .finally(() => {
+        stopLoading();
     });
 }
 
@@ -363,9 +372,11 @@ const toggleTheme = () => {
 // 监听菜单事件
 watch(() => store.select, (select) => {
     if (select === 'polish') {
+        loading();
         polishSelected(store.content);
     }
     if (select === 'correct') {
+        loading();
         correctSelected(store.content);
     }
     if (select === 'delete') {
@@ -378,6 +389,14 @@ watch(() => store.select, (select) => {
         pasteSelected(store.content);
     }
 });
+
+const loading = () => {
+    showLoading.value = true;
+}
+
+const stopLoading = () => {
+    showLoading.value = false;
+}
 </script>
 <style>
 .EditMain {
