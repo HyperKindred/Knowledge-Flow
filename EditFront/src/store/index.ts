@@ -10,6 +10,8 @@ import BulletList from '@tiptap/extension-bullet-list';
 import ListItem from '@tiptap/extension-list-item';
 import CharacterCount from '@tiptap/extension-character-count';
 import { Extension } from '@tiptap/core';
+import { Highlight } from '@tiptap/extension-highlight'
+import { Italic } from '@tiptap/extension-italic'
 
 export const mainStore = defineStore('main', {
   state: () => ({
@@ -114,6 +116,11 @@ export const mainStore = defineStore('main', {
               levels: [1, 2, 3, 4, 5],
             },
           }),
+          Highlight.configure({
+            multicolor: true,  // 可选，允许多种颜色高亮
+            color: '#ffeb3b', // 可选，设置默认高亮颜色
+          }),
+          Italic,
           ExtendedStyle,
           Paragraph,
           TaskList,
