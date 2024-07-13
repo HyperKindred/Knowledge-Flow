@@ -278,6 +278,11 @@ watch(() => store.htmlContent, (newContent) => {
   if (editor.value) {
     editor.value.commands.setContent(newContent, 'html');
   }
+  stopLoading();
+});
+
+watch(() => store.openNoteID, () => {
+  loading();
 });
 
 
