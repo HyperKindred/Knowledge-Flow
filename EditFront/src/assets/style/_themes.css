@@ -11,6 +11,7 @@
     --countColor:rgba(209, 208, 208, 0.913);
     --hoverColor:rgba(206, 205, 205, 0.733);
     --currentColor:rgba(184, 184, 184, 0.683);
+    --loadingColor:rgba(255, 255, 255, 0.7);
 }
 
 :root[theme='dark']{
@@ -26,4 +27,5 @@
     --countColor:rgba(35, 35, 35, 0.913);
     --hoverColor:rgba(175, 175, 175, 0.733);
     --currentColor:rgba(134, 134, 134, 0.683);
+    --loadingColor:rgba(0, 0, 0, 0.7);
 }
