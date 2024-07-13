@@ -26,6 +26,7 @@ export const mainStore = defineStore('main', {
     username: null,
     content: null,
     select: null,
+    isLoading: false,
     headings: [],
     background: "night_background",
     theme: localStorage.getItem('theme') || 'dark',
@@ -157,6 +158,7 @@ export const mainStore = defineStore('main', {
     setAllElementsStyle(type, level, style) {
       if (this.editor) {
         this.editor.chain().focus().setAllElementsStyle(type, level, style).run();
+        this.isLoading = true;
       } else {
         alert('editor is not ready');
       }
