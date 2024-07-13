@@ -8,7 +8,7 @@
       </div>
       <div class="leftlist">
         <svg @click="navigateTo('Catalog')" id="Catalog" t="1719471435071" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="18790" width="200" height="200"><path d="M867.995 459.647h-711.99c-27.921 0-52.353 24.434-52.353 52.353s24.434 52.353 52.353 52.353h711.99c27.921 0 52.353-24.434 52.353-52.353s-24.434-52.353-52.353-52.353z" p-id="18791" fill="#bfbfbf"></path><path d="M867.995 763.291h-711.99c-27.921 0-52.353 24.434-52.353 52.353s24.434 52.353 52.353 52.353h711.99c27.921 0 52.353-24.434 52.353-52.353s-24.434-52.353-52.353-52.353z" p-id="18792" fill="#bfbfbf"></path><path d="M156.005 260.709h711.99c27.921 0 52.353-24.434 52.353-52.353s-24.434-52.353-52.353-52.353h-711.99c-27.921 0-52.353 24.434-52.353 52.353s24.434 52.353 52.353 52.353z" p-id="18793" fill="#bfbfbf"></path>
-          <title class="tooltip">目录</title>
+          <desc class="tooltip">目录</desc>
         </svg>
         <svg @click="navigateTo('Outline')" id="Outline" t="1719471418244" class="icon" viewBox="0 0 1126 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2304" width="200" height="200"><path d="M142.234 0a142.234 142.234 0 0 1 56.883 272.589v210.944h113.715c15.718 0 28.467 12.8 28.467 28.467v56.883a28.467 28.467 0 0 1-28.467 28.467H199.168v263.117c0 16.538 3.43 31.488 8.704 42.087l2.048 3.686a34.1 34.1 0 0 0 1.894 2.918l0.87 1.024h100.148c15.718 0 28.467 12.8 28.467 28.468v56.883A28.467 28.467 0 0 1 312.832 1024H207.258c-72.807 0-119.399-73.267-121.856-156.774l-0.052-6.759V272.59A142.234 142.234 0 0 1 142.182 0z m886.988 853.35a51.2 51.2 0 0 1 51.2 51.2v68.25a51.2 51.2 0 0 1-51.2 51.2H562.79a51.2 51.2 0 0 1-51.2-51.2v-68.25a51.2 51.2 0 0 1 51.2-51.2h466.432z m0-398.233a51.2 51.2 0 0 1 51.2 51.2v68.25a51.2 51.2 0 0 1-51.2 51.2H562.79a51.2 51.2 0 0 1-51.2-51.2v-68.199a51.2 51.2 0 0 1 51.2-51.2h466.432z m0-398.234a51.2 51.2 0 0 1 51.2 51.2v68.25a51.2 51.2 0 0 1-51.2 51.2H562.79a51.2 51.2 0 0 1-51.2-51.2v-68.25a51.2 51.2 0 0 1 51.2-51.2h466.432z" fill="#bfbfbf" p-id="2305"></path>
           <title class="tooltip">大纲</title>
@@ -39,7 +39,8 @@
         <div class="toptools">
           <EditorMenu :editor="editor" />
           <div class="topBtn">
-          <button class="topButton" @click="toggleTheme()">昼夜切换</button>
+          <div id="switch" @click="toggleTheme"></div>
+          <!-- <button class="topButton" @click="toggleTheme()">昼夜切换</button> -->
           <button class="topButton" @click="autoFormat()">思维导图</button>
           <button class="topButton" @click="autoFormat()">格式化</button>
           <button class="topButton" @click="saveHTMLText()">Save</button>
@@ -74,7 +75,7 @@
 </template>
 <script lang="ts" setup>
 import { Brush, EditPen, } from '@element-plus/icons-vue'
-import { defineComponent, onMounted, onBeforeUnmount, ref, watch, computed } from 'vue';
+import { defineComponent, onMounted, onBeforeUnmount, ref, watch, computed, nextTick } from 'vue';
 import { Editor, EditorContent, useEditor, BubbleMenu } from '@tiptap/vue-3';
 import { storeToRefs } from 'pinia'
 import Underline from '@tiptap/extension-underline'
@@ -285,16 +286,6 @@ watch(() => store.openNoteID, () => {
   loading();
 });
 
-watch(() => store.usedStyleID, () => {
-  loading();
-});
-
-watch(() => store.isLoading, () => {
-  stopLoading();
-  store.isLoading = false;
-  console.log(store.isLoading);
-});
-
 
 // 获取选中的文字
 const selecttext = (e: MouseEvent) => {
@@ -381,8 +372,20 @@ const pasteSelected = (text) => {
     });
 }
 const toggleTheme = () => {
+  const sw = document.getElementById('switch');
+  if (sw) {
+    sw.classList.add('pull');
+    console.log('Added pull class'); // 调试用
+    setTimeout(() => {
+      sw.classList.remove('pull');
+      console.log('Removed pull class'); // 调试用
+    }, 600);
+  }
+
   store.toggleTheme();
 };
+
+
 
 // 监听菜单事件
 watch(() => store.select, (select) => {
@@ -414,6 +417,8 @@ const stopLoading = () => {
 }
 </script>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+
 .EditMain {
   position: relative;
   width: 100w;
@@ -507,8 +512,57 @@ const stopLoading = () => {
   bottom: 2.5%;
   top: 1%;
   border-radius: 5px;
+
 }
 
+
+
+*,
+* *,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+
+#switch {
+  position: fixed;
+  height: 100px;
+  width: 2px;
+  background: var(--titleColor);
+  right: 22%;
+  top: -60px;
+  cursor: pointer;
+  z-index: 9999;
+}
+
+#switch::after {
+  content: '';
+  position: absolute;
+  border: 2px solid var(--titleColor);
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  left: -10px;
+  bottom: -20px;
+  z-index: 9999;
+}
+
+@keyframes line {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(30px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.pull {
+  animation: line 0.5s ease;
+}
 
 
 .editor {
