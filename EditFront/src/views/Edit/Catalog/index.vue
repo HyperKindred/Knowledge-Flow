@@ -50,6 +50,8 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import { useEditorStore } from '../../../router/index.ts'
 import axios from 'axios';
 import { mainStore } from '@/store/index.ts';
+import Loading from '../../../components/Loading.vue'
+
 const treeData = ref([]);
 const theme = ref('')
 const defaultProps = {
@@ -197,7 +199,10 @@ const handleNodeClick = async (data) => {
     for (let i = 0; i < noteResponse.data.noteList.length; i++) {
       if (noteResponse.data.noteList[i][0] == store.openNoteID) {
         const htmlContent = noteResponse.data.noteList[i][2];
-        store.setHTMLContent(htmlContent);
+        store.setHTMLContent(null);
+        nextTick(() => {
+          store.setHTMLContent(htmlContent);
+        });
         store.usedStyleID = noteResponse.data.noteList[i][3];
         break; // 找到匹配的Note后可以直接跳出循环
       }
