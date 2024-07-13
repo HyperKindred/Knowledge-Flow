@@ -356,7 +356,7 @@ const deleteSelected = () => {
 
 // 复制函数
 const copySelected = () => {
-    navigator.clipboard.writeText(contentStore.content);
+    navigator.clipboard.writeText(store.content);
 }
 
 // 粘贴函数
