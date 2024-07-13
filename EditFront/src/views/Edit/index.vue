@@ -49,7 +49,7 @@
           <Loading v-if="showLoading"/>
           <ContextMenu>
           <EditorContent @mousescroll="" @mousedown="" @mousemove=""
-            @mouseup="selecttext($event)" style="padding: 8px;" :editor="editor" />
+            @mouseup="selecttext($event)" style="padding: 8px; color: var(--textColor);" :editor="editor" />
           </ContextMenu>
         </div>
 
