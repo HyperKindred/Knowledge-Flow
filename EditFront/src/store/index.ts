@@ -26,7 +26,7 @@ export const mainStore = defineStore('main', {
     select: null,
     headings: [],
     background: "night_background",
-    theme: localStorage.getItem('theme') || 'light',
+    theme: localStorage.getItem('theme') || 'dark',
     stylesConfig: {
       heading: {
         1: {
@@ -249,18 +249,41 @@ const ExtendedStyle = Extension.create({
         const { tr } = state;
         state.doc.descendants((node, pos) => {
           if (node.type.name === type && (level === null || node.attrs.level === level)) {
+            let newStyle = (node.attrs.style || '').split(';').filter(Boolean);
+      
+            // Convert the style string to a key-value map
+            const styleMap = {};
+            newStyle.forEach(s => {
+              const [key, value] = s.split(':').map(str => str.trim());
+              styleMap[key] = value;
+            });
+      
+            // Add new styles to the map
+            style.split(';').filter(Boolean).forEach(s => {
+              const [key, value] = s.split(':').map(str => str.trim());
+              styleMap[key] = value;
+            });
+      
+            // Convert the style map back to a string
+            newStyle = Object.entries(styleMap).map(([key, value]) => `${key}: ${value}`).join('; ');
+      
             const newAttrs = {
               ...node.attrs,
-              style: (node.attrs.style || '') + style,
+              style: newStyle,
             };
+      
             tr.setNodeMarkup(pos, undefined, newAttrs);
           }
         });
+      
         if (tr.docChanged) {
           dispatch(tr);
         }
+      
         return true;
       },
+      
     };
   },
 });
+
