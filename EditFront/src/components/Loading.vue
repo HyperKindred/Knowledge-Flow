@@ -15,12 +15,12 @@
     transform: translate(-50%, -50%);
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: var(--loadingColor);
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    color: #efefef;
+    color: var(--titleColor);
     font-size: 15px;
     z-index: 1;
     animation: easein 0.5s;
@@ -52,7 +52,7 @@ svg circle {
     height: 100%;
     fill: none;
     stroke-width: 3px;
-    stroke: #efefef;
+    stroke: var(--titleColor);
     transform: translate(5px,5px);
     stroke-dasharray: 110;
     stroke-dashoffset: 110;
