@@ -10,7 +10,7 @@
     </div>
     <div class="content">
       <Loading v-if="showLoading"/>
-      <el-tree :data="treeData" :props="defaultProps" :highlight-current="true" node-key="id" ref="fileTree"
+      <el-tree :data="treeData" :props="defaultProps" :highlight-current="true" node-key="id" ref="fileTree" empty-text=""
         @node-drop="handleNodeDrop" @current-change="showEditorCard" @node-click="handleNodeClick">
         <template #default="{ node, data }">
           <div class="file-item">
@@ -335,6 +335,8 @@ function showEditorCard() {
 
   /* overflow-y: auto; */
 }
+
+
 
 :deep().el-tree>.el-tree-node>.el-tree-node__content:hover {
   background-color: var(--hoverColor);
