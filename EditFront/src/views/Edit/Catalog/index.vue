@@ -9,7 +9,7 @@
       </svg>
     </div>
     <div class="content">
-      <Loading v-if="showLoading"/>
+      <Loading2 v-if="showLoading"/>
       <el-tree :data="treeData" :props="defaultProps" :highlight-current="true" node-key="id" ref="fileTree" empty-text=""
         @node-drop="handleNodeDrop" @current-change="showEditorCard" @node-click="handleNodeClick">
         <template #default="{ node, data }">
@@ -51,7 +51,7 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import { useEditorStore } from '../../../router/index.ts'
 import axios from 'axios';
 import { mainStore } from '@/store/index.ts';
-import Loading from '../../../components/Loading.vue'
+import Loading2 from '../../../components/Loading2.vue'
 
 const treeData = ref([]);
 const theme = ref('')
@@ -64,8 +64,8 @@ const newNodeId = ref(1);
 const editingNode = ref(null);
 const selectedNode = ref(null);
 const store = mainStore();
-const username = localStorage.getItem('username');
 const showLoading = ref(true);
+const username = localStorage.getItem('username');
 
 store.setUsername(username);
 const addFile = (fileId, fileName) => {
@@ -284,11 +284,7 @@ function showEditorCard() {
 
 <style scoped>
 .file-manager {
-  display: flex;
-  flex-direction: column;
   height: 100%;
-  background-color: var(--bgColor);
-  color: var(--titleColor);
 }
 
 .add-file {

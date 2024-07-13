@@ -9,6 +9,7 @@
       </svg>
     </div>
     <div class="content">
+      <Loading2 v-if="showLoading"/>
       <el-tree
     :data="treeData"
     :props="defaultProps"
@@ -73,6 +74,8 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import { useEditorStore } from '../../../router/index.ts'
 import axios from 'axios';
 import { mainStore } from '@/store/index.ts';
+import Loading2 from '../../../components/Loading2.vue';
+
 const treeData = ref([
 
 ]);
@@ -86,6 +89,10 @@ const newNodeId = ref(1);
 const editingNode = ref(null);
 const selectedNode = ref(null);
 const store = mainStore();
+const showLoading = ref(true);
+const username = localStorage.getItem('username');
+
+store.setUsername(username);
 
 const addStyle = (styleId, styleName) => {
   const newStyle = { id: styleId, label: styleName };
@@ -254,8 +261,10 @@ onBeforeMount(() => {
   }).then(res => {
     for (let i = 0; i < res.data.styleList.length; i++) {
 
-      addStyleWithoutRename(res.data.styleList[i][0], res.data.styleList[i][1])
+      addStyleWithoutRename(res.data.styleList[i][0], res.data.styleList[i][1]);
     }
+  }).finally(() => {
+    showLoading.value = false;
   });
 });
 
@@ -291,6 +300,9 @@ function showStyleEditor(data) {
 </script>
 
 <style scoped>
+.file-manager {
+  height: 100%;
+}
 
 .add-style {
   display: flex;
@@ -319,8 +331,9 @@ function showStyleEditor(data) {
 }
 
 .content {
+  position: relative;
   width: auto;
-  height: auto;
+  height: calc(100% - 85.84px);
   object-fit: contain;
   /* background-color: rgba(134, 134, 134, 0.683); */
 }
