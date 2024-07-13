@@ -11,9 +11,12 @@
                 </button>
                 <span class="right-language">英文</span>
             </div>
-            <textarea class="textarea" v-model="textarea" placeholder="输入文本"></textarea>
+            <textarea class="inputarea" v-model="textarea" placeholder="输入文本"></textarea>
             <button class="translate-button" @click="translate">翻译</button>
-            <textarea class="textarea" v-model="res" placeholder="翻译结果"></textarea>
+            <div class="loadingarea">
+                <Loading v-if="showLoading"/>
+                <textarea class="resultarea" v-model="res" placeholder="翻译结果"></textarea>
+            </div>
             <button class="translate-button" @click="copy">复制</button>
         </div>
     </div>
@@ -25,12 +28,15 @@ import axios from 'axios';
 import { ElMessage } from 'element-plus';
 import { Switch } from '@element-plus/icons-vue';
 import { mainStore } from '@/store/index.ts';
+import Loading from '../../../components/Loading.vue'
 
 const textarea = ref('');
 const res = ref('');
 const store = mainStore();
 const mode = ref('0');
 const theme = ref('')
+const showLoading = ref(false);
+
 const switchLanguages = () => {
     if (mode.value === '0') {
         document.querySelector('.left-language').style.left = 'calc(65% - 30px)';
@@ -49,6 +55,9 @@ const translate = () => {
         ElMessage({message: '请输入文本', type: 'error', duration: 5 * 1000, grouping: true});
         return;
     }
+
+    loading();
+
     let formData = new FormData();
     formData.append('text', textarea.value);
     formData.append('mode', mode.value);
@@ -70,6 +79,9 @@ const translate = () => {
     .catch(error => {
         console.error('Error posting data:', error);
         ElMessage({message: '翻译失败：网络错误，请稍后重试！', type: 'error', duration: 5 * 1000, grouping: true});
+    })
+    .finally(() => {
+        stopLoading();
     });
 }
 
@@ -99,6 +111,14 @@ onMounted(() => {
   store.initializeTheme();
   theme.value = store.theme;
 });
+
+const loading = () => {
+    showLoading.value = true;
+}
+
+const stopLoading = () => {
+    showLoading.value = false;
+}
 </script>
 
 <style scoped>
@@ -152,7 +172,7 @@ onMounted(() => {
     color:  var(--textColor);
     transition: left 0.3s ease;
 }
-.textarea {
+.inputarea {
     resize: none;
     outline: none;
     background-color: var(--btnColor);
@@ -196,5 +216,29 @@ onMounted(() => {
 .translate-button:hover {
     background-color: #b2b2b2;
     color: var(--textColor);
+}
+.loadingarea {
+    position: relative;
+    display: flex;
+    resize: none;
+    outline: none;
+    background-color: #33333300;
+    border: none;
+    width: calc(70% + 20px);
+    height: calc(40% + 20px);
+}
+.resultarea {
+    resize: none;
+    outline: none;
+    background-color: var(--btnColor);
+    color:  var(--textColor);
+    border: none;
+    padding: 10px;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    font-size: 20px;
+    font-family: 'Arial';
+    border-radius: 10px;
 }
 </style>
