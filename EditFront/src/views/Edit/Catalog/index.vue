@@ -9,6 +9,7 @@
       </svg>
     </div>
     <div class="content">
+      <Loading v-if="showLoading"/>
       <el-tree :data="treeData" :props="defaultProps" :highlight-current="true" node-key="id" ref="fileTree"
         @node-drop="handleNodeDrop" @current-change="showEditorCard" @node-click="handleNodeClick">
         <template #default="{ node, data }">
@@ -64,6 +65,8 @@ const editingNode = ref(null);
 const selectedNode = ref(null);
 const store = mainStore();
 const username = localStorage.getItem('username');
+const showLoading = ref(true);
+
 store.setUsername(username);
 const addFile = (fileId, fileName) => {
   const newFile = { id: fileId, label: fileName };
@@ -261,6 +264,8 @@ onBeforeMount(() => {
 
       addFileWithoutRename(res.data.noteList[i][0], res.data.noteList[i][1])
     }
+  }).finally(() => {
+    showLoading.value = false;
   });
 });
 
@@ -278,7 +283,13 @@ function showEditorCard() {
 </script>
 
 <style scoped>
-
+.file-manager {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--bgColor);
+  color: var(--titleColor);
+}
 
 .add-file {
   display: flex;
@@ -307,8 +318,9 @@ function showEditorCard() {
 }
 
 .content {
+  position: relative;
   width: auto;
-  height: auto;
+  height: calc(100% - 85.84px);
   object-fit: contain;
   /* background-color: rgba(134, 134, 134, 0.683); */
 }
