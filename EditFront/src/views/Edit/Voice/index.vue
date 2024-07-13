@@ -6,6 +6,9 @@
         </div>   
         <input type="file" ref="fileInput" @change="handleFileChange" multiple hidden /> 
     </div>
+    <div class="loadingarea">
+      <Loading v-if="showLoading"/>
+      </div>
     <div class="content">
       {{ responseText }}
     </div>
@@ -14,7 +17,7 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { mainStore } from '@/store';
-
+import Loading from '../../../components/Loading.vue'
 
 const store = mainStore();
 const fileList = ref<File[]>([]);
@@ -24,6 +27,8 @@ const responseText = ref<string | null>(null);
   fileInput.value?.click();
 };
 const theme = ref('')
+const showLoading = ref(false);
+
 const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement;
   if (target.files) {
@@ -33,6 +38,8 @@ const handleFileChange = (event: Event) => {
 };
 
 const uploadimg = () => {
+  showLoading.value = true;
+
   let formData = new FormData();
   formData.append("username", store.username);
   fileList.value.forEach((file) => {
@@ -52,6 +59,8 @@ const uploadimg = () => {
     } else {
       responseText.value = res.data.res;
     }
+  }).finally(() => {
+    showLoading.value = false;
   });
 };
 
@@ -95,5 +104,10 @@ onMounted(() => {
   border-radius: 10px;
   background-color: rgba(134, 134, 134, 0.683);
 }
+  .loadingarea {
+    position: relative;
+    width: auto;
+    height: calc(100% - 85.84px);
+  }
 </style>
   
