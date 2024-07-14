@@ -10,10 +10,12 @@ import BulletList from '@tiptap/extension-bullet-list';
 import ListItem from '@tiptap/extension-list-item';
 import CharacterCount from '@tiptap/extension-character-count';
 import { Extension } from '@tiptap/core';
-import { Highlight } from '@tiptap/extension-highlight'
-import { Italic } from '@tiptap/extension-italic'
-import { Markdown } from 'tiptap-markdown';
+import { Highlight } from '@tiptap/extension-highlight';
+import { Italic } from '@tiptap/extension-italic';
+import MarkdownIt from 'markdown-it';
+import { DOMParser as ProseMirrorDOMParser } from 'prosemirror-model';
 
+// 定义 Store
 export const mainStore = defineStore('main', {
   state: () => ({
     ipAddress: 'http://123.57.215.19:5000',
@@ -118,7 +120,6 @@ export const mainStore = defineStore('main', {
               levels: [1, 2, 3, 4, 5],
             },
           }),
-          Markdown,
           Highlight.configure({
             multicolor: true,  // 可选，允许多种颜色高亮
             color: '#ffeb3b', // 可选，设置默认高亮颜色
@@ -212,7 +213,8 @@ export const mainStore = defineStore('main', {
       this.theme = this.theme === 'light' ? 'dark' : 'light';
       document.documentElement.setAttribute('theme', this.theme);
       localStorage.setItem('theme', this.theme);
-    },
+    }, 
+
 
     setTheme(theme: string) {
       this.theme = theme;
@@ -222,10 +224,53 @@ export const mainStore = defineStore('main', {
     initializeTheme() {
       document.documentElement.setAttribute('theme', this.theme);
     },
+    convertSelectionToMarkdown() {
+      const { state, view } = this.editor;
+      const { from, to } = state.selection;
+    
+      // 构建包含换行符的选中文本
+      let selectedText = '';
+      let lastPos = from;
+    
+      state.doc.nodesBetween(from, to, (node, pos, parent) => {
+        if (node.isBlock && pos > lastPos) {
+          selectedText += '\n\n';  // 在块级元素之间插入两个换行符
+          lastPos = pos;
+        }
+        if (node.isText) {
+          selectedText += node.textContent;
+        }
+      });
+    
+      // 使用 markdown-it 解析 Markdown 文本
+      const md = new MarkdownIt({
+        html: true,
+        linkify: true,
+        typographer: true,
+      });
+    
+      // 解析 Markdown 内容
+      const htmlContent = md.render(selectedText.trim()); // 修剪多余的空白
+    
+      // 调试信息
+      console.log('Selected Text:', selectedText);
+      console.log('HTML Content:', htmlContent);
 
+    
+      // 使用 DOMParser 解析 HTML
+      const parser = new DOMParser();
+      const parsedDoc = parser.parseFromString(htmlContent, 'text/html');
+    
+      // 使用 ProseMirror DOMParser 解析 HTML
+      const fragment = ProseMirrorDOMParser.fromSchema(state.schema).parse(parsedDoc.body);
+    
+      // 处理插入的内容
+      const transaction = state.tr.replaceSelectionWith(fragment);
+      view.dispatch(transaction);
+    },
+    
   },
 });
-
 
 const ExtendedStyle = Extension.create({
   name: 'extendedStyle',

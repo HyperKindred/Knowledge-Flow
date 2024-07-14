@@ -147,7 +147,11 @@ const items = [
     title: 'Convert to Markdown',
     iconType: 'custom',
     action: () => {
-
+      if (store.convertSelectionToMarkdown) {
+        store.convertSelectionToMarkdown(); // 调用方法
+      } else {
+        console.error('convertSelectionToMarkdown 方法不存在');
+      }
     },
     isActive: () => false,
   },
