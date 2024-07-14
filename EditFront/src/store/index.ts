@@ -12,6 +12,7 @@ import CharacterCount from '@tiptap/extension-character-count';
 import { Extension } from '@tiptap/core';
 import { Highlight } from '@tiptap/extension-highlight'
 import { Italic } from '@tiptap/extension-italic'
+import { Markdown } from 'tiptap-markdown';
 
 export const mainStore = defineStore('main', {
   state: () => ({
@@ -117,6 +118,7 @@ export const mainStore = defineStore('main', {
               levels: [1, 2, 3, 4, 5],
             },
           }),
+          Markdown,
           Highlight.configure({
             multicolor: true,  // 可选，允许多种颜色高亮
             color: '#ffeb3b', // 可选，设置默认高亮颜色
@@ -206,11 +208,11 @@ export const mainStore = defineStore('main', {
     setUsername(username: string) {
       this.username = username
     },
-toggleTheme() {
-  this.theme = this.theme === 'light' ? 'dark' : 'light';
-  document.documentElement.setAttribute('theme', this.theme);
-  localStorage.setItem('theme', this.theme);
-},
+    toggleTheme() {
+      this.theme = this.theme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('theme', this.theme);
+      localStorage.setItem('theme', this.theme);
+    },
 
     setTheme(theme: string) {
       this.theme = theme;
@@ -219,9 +221,11 @@ toggleTheme() {
     },
     initializeTheme() {
       document.documentElement.setAttribute('theme', this.theme);
-    }
+    },
+
   },
 });
+
 
 const ExtendedStyle = Extension.create({
   name: 'extendedStyle',
@@ -259,40 +263,39 @@ const ExtendedStyle = Extension.create({
         state.doc.descendants((node, pos) => {
           if (node.type.name === type && (level === null || node.attrs.level === level)) {
             let newStyle = (node.attrs.style || '').split(';').filter(Boolean);
-      
+
             // Convert the style string to a key-value map
             const styleMap = {};
             newStyle.forEach(s => {
               const [key, value] = s.split(':').map(str => str.trim());
               styleMap[key] = value;
             });
-      
+
             // Add new styles to the map
             style.split(';').filter(Boolean).forEach(s => {
               const [key, value] = s.split(':').map(str => str.trim());
               styleMap[key] = value;
             });
-      
+
             // Convert the style map back to a string
             newStyle = Object.entries(styleMap).map(([key, value]) => `${key}: ${value}`).join('; ');
-      
+
             const newAttrs = {
               ...node.attrs,
               style: newStyle,
             };
-      
+
             tr.setNodeMarkup(pos, undefined, newAttrs);
           }
         });
-      
+
         if (tr.docChanged) {
           dispatch(tr);
         }
-      
+
         return true;
       },
-      
+
     };
   },
 });
-
