@@ -42,6 +42,11 @@ const check = () => {
         return;
     }
 
+    if (/^\s*$/.test(username.value) || /^\s*$/.test(password1.value) || /^\s*$/.test(password2.value)) {
+        ElMessage({message: '用户名不能为空格', type: 'error', duration: 5 * 1000, grouping: true});
+        return;
+    }
+
     console.log('password1:', password1);
     console.log('password2:', password2);
 
