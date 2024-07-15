@@ -5,6 +5,7 @@
       <div class="lefttop">
         <img :src="misakaImg" alt="Misaka Mikoto">
         <h2 class="username-display">{{ store.username }}</h2>
+        <ThemeIcon />
       </div>
       <div class="leftlist">
         <svg @click="navigateTo('Catalog')" id="Catalog" t="1719471435071" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="18790" width="200" height="200"><path d="M867.995 459.647h-711.99c-27.921 0-52.353 24.434-52.353 52.353s24.434 52.353 52.353 52.353h711.99c27.921 0 52.353-24.434 52.353-52.353s-24.434-52.353-52.353-52.353z" p-id="18791" fill="#bfbfbf"></path><path d="M867.995 763.291h-711.99c-27.921 0-52.353 24.434-52.353 52.353s24.434 52.353 52.353 52.353h711.99c27.921 0 52.353-24.434 52.353-52.353s-24.434-52.353-52.353-52.353z" p-id="18792" fill="#bfbfbf"></path><path d="M156.005 260.709h711.99c27.921 0 52.353-24.434 52.353-52.353s-24.434-52.353-52.353-52.353h-711.99c-27.921 0-52.353 24.434-52.353 52.353s24.434 52.353 52.353 52.353z" p-id="18793" fill="#bfbfbf"></path>
@@ -122,6 +123,7 @@ import { Extension } from '@tiptap/core'
 
 import lightImage from '@/assets/images/light_background.jpg';
 import darkImage from '@/assets/images/dark_background.jpg';
+import ThemeIcon from '@/components/ThemeIcon.vue';
 const router = useRouter();
 const lowlight = createLowlight()
 lowlight.register({ html, ts, css, js })
@@ -391,6 +393,7 @@ const toggleTheme = () => {
   }
 
   store.toggleTheme();
+
 };
 
 
@@ -415,6 +418,7 @@ watch(() => store.select, (select) => {
         pasteSelected(store.content);
     }
 });
+
 
 const loading = () => {
     showLoading.value = true;
