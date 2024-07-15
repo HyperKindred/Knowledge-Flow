@@ -94,10 +94,10 @@ onMounted(() => {
 /* 太阳移动的动画 */
 @keyframes Sun-disappear {
   0% {
-    transform: translateY(0);
+    transform: translateY(80px);
   }
   100% {
-    transform: translateY(-80px);
+    transform: translateY(0);
   }
 }
 
@@ -113,10 +113,10 @@ onMounted(() => {
 /* 月亮移动的动画 */
 @keyframes Moon-disappear{
   0% {
-    transform: translateY(0);
+    transform: translateY(80px);
   }
   100% {
-    transform: translateY(-80px);
+    transform: translateY(0);
   }
 }
 
