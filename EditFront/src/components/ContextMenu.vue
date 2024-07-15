@@ -118,7 +118,7 @@ const showMenu = (e: MouseEvent) => {
     if (store.content !== '') {
         e.preventDefault();
 
-        const { clientX, clientY } = e;
+        // const { clientX, clientY } = e;
 
         isVisible.value = true;
         menuStyle.left = `${e.clientX}px`;
@@ -135,71 +135,70 @@ const hideMenu = () => {
 // 监听全局点击事件以隐藏菜单
 onMounted(() => {
     document.addEventListener('click', hideMenu);
-    // document.addEventListener('scroll', showMenu);
+    // document.addEventListener('scroll', hideMenu);
 });
 </script>
   
 <style scoped>
-    .container {
-        display: inline-block;
-        width: 100%;
-        height: 100%;
-    }
-    .fade-enter-from, .fade-leave-to {
-        opacity: 0;
-    }
-    .fade-enter-active {
-        transition: opacity 0.2s ease;
-    }
-    .fade-enter-to, .fade-leave-from {
-        opacity: 1;
-    }
-    .menu {
-        position: fixed;
-        width: 300px;
-        height: auto;
-        background-color: #2c2c2c;
-        padding: 3px;
-        margin: 0;
-        color: #fff;
-        border: 1px solid #494949;
-        border-radius: 10px;
-        z-index: 999;
-        list-style-type: none;
-    }
-    .menuitem {
-        padding-left: 0px;
-        padding-top: 4px;
-        padding-bottom: 4px;
-        margin: 2px 1px;
-        height: 25px;
-        border-radius: 4px;
-        font-size: 15.5px;
-        user-select: none;
-        display: flex;
-        align-items: center;
-    }
-    .menuitem:hover {
-        background-color: #484848;
-    }
-    .icon {
-        margin-left: 10px;
-        margin-right: 13px;
-        width: 20px;
-        height: 25px;
-    }
-    .divider {
-        display: block;
-        width: 307.47px;
-        height: 1px;
-        transform: translateX(-3.741px);
-        background-color: #494949;
-        margin: 5px 0;
-    }
-    .hotkey {
-        margin-left: 150px;
-        font-size: 14px;
-        color: #d2d2d2;
-        user-select: none;
-    }
+.container {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+}
+.fade-enter-from, .fade-leave-to {
+    opacity: 0;
+}
+.fade-enter-active {
+    transition: opacity 0.2s ease;
+}
+.fade-enter-to, .fade-leave-from {
+    opacity: 1;
+}
+.menu {
+    position: fixed;
+    width: 307.5px;
+    height: auto;
+    background-color: rgb(55, 55, 55);
+    padding: 3px;
+    margin: 0;
+    color: #fff;
+    border: 1px solid #494949;
+    border-radius: 10px;
+    z-index: 999;
+    list-style-type: none;
+}
+.menuitem {
+    padding-left: 0px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    margin: 2px 1px;
+    border-radius: 4px;
+    font-size: 15.5px;
+    user-select: none;
+    display: flex;
+    align-items: center;
+}
+.menuitem:hover {
+    background-color: #484848;
+}
+.icon {
+    margin-left: 10px;
+    margin-right: 13px;
+    width: 20px;
+    height: 25px;
+}
+.divider {
+    display: block;
+    width: 307.47px;
+    height: 1px;
+    transform: translateX(-3.741px);
+    background-color: #494949;
+    margin: 5px 0;
+}
+.hotkey {
+    margin-left: 150px;
+    font-size: 14px;
+    color: #d2d2d2;
+    user-select: none;
+}
 </style>
