@@ -320,6 +320,7 @@ function showEditorCard() {
   height: calc(100% - 85.84px);
   object-fit: contain;
   /* background-color: rgba(134, 134, 134, 0.683); */
+  overflow-y: hidden;
 }
 
 .el-tree {

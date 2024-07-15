@@ -42,11 +42,6 @@ const check = () => {
         return;
     }
 
-    if (/^\s*$/.test(username.value) || /^\s*$/.test(password1.value) || /^\s*$/.test(password2.value)) {
-        ElMessage({message: '用户名不能为空格', type: 'error', duration: 5 * 1000, grouping: true});
-        return;
-    }
-
     console.log('password1:', password1);
     console.log('password2:', password2);
 
@@ -101,7 +96,7 @@ const signUp = () => {
     .signin-wrapper {
         background-color: rgba(136, 169, 202, 0.8); 
         width: 358px;
-        height: 648px;
+        height: 628px;
         border-radius: 15px;
         padding: 0 50px;
         display: flex;
@@ -111,15 +106,6 @@ const signUp = () => {
         top: 50%;
         transform: translate(-50%, -50%);
         backdrop-filter: blur(5px);
-        animation: appear 0.2s ease;
-    }
-    @keyframes appear {
-        0% {
-            height: 548px;
-        }
-        100% {
-            height: 648px;
-        }
     }
     .header {
         opacity: 0.7;
@@ -172,21 +158,11 @@ const signUp = () => {
     .link {
         opacity: 0.9;
         color: #04073d;
-        animation: out 0.2s ease;
     }
     .msg {
         opacity: 0.7;
         text-align: center;
         line-height: 88px;
         color: #eeeeee;
-        animation: out 0.2s ease;
-    }
-    @keyframes out {
-        0%,30% {
-            opacity: 0;
-        }
-        100% {
-            opacity: 0.7;
-        }
     }
 </style>

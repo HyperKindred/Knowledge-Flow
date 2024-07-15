@@ -9,10 +9,9 @@ export function getTest(params: any) {
 }
 
 //get无值
-export function (params: any) {
+export function getTestWithoutParams() {
   return http.request({
     url: '/test',
-    method: 'get',
-    params
+    method: 'get'
   })
 }

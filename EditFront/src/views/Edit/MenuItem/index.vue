@@ -1,7 +1,7 @@
 <template>
   <button
     class="menu-item"
-    :class="{ 'is-active': props.isActive ? props.isActive() : null }"
+    :class="{ 'is-active': props.isActive ? props.isActive() : false }"
     @click="props.action"
     :title="props.title"
   >
@@ -9,7 +9,9 @@
       <use :xlink:href="`${remixiconUrl}#ri-${props.icon}`" />
     </svg>
     <template v-else-if="props.iconType === 'custom'">
-      <svg t="1720926979138" class="markdown" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4323" width="256" height="256"><path d="M85.333333 682.666667 85.333333 341.333333 170.666667 341.333333 298.666667 469.333333 426.666667 341.333333 512 341.333333 512 682.666667 426.666667 682.666667 426.666667 462.08 298.666667 590.08 170.666667 462.08 170.666667 682.666667 85.333333 682.666667M682.666667 341.333333 810.666667 341.333333 810.666667 512 917.333333 512 746.666667 704 576 512 682.666667 512 682.666667 341.333333Z" p-id="4324"></path></svg>
+      <svg t="1720926979138" class="markdown" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4323" width="256" height="256">
+        <path d="M85.333333 682.666667 85.333333 341.333333 170.666667 341.333333 298.666667 469.333333 426.666667 341.333333 512 341.333333 512 682.666667 426.666667 682.666667 426.666667 462.08 298.666667 590.08 170.666667 462.08 170.666667 682.666667 85.333333 682.666667M682.666667 341.333333 810.666667 341.333333 810.666667 512 917.333333 512 746.666667 704 576 512 682.666667 512 682.666667 341.333333Z" p-id="4324"></path>
+      </svg>
     </template>
   </button>
 </template>
@@ -19,8 +21,8 @@ import remixiconUrl from 'remixicon/fonts/remixicon.symbol.svg'
 const props = defineProps<{
   icon: string
   title: string
-  action: Function
-  isActive?: Function
+  action: () => void
+  isActive?: () => boolean
   iconType?: string
 }>()
 </script>
@@ -37,7 +39,6 @@ const props = defineProps<{
   margin-right: 0.25rem;
   width: 1.75rem;
 
-
   svg {
     fill: currentColor;
     height: 100%;
@@ -49,6 +50,4 @@ const props = defineProps<{
     background-color: var(--titleColor);
   }
 }
-
-
 </style>

@@ -129,7 +129,7 @@ const stopLoading = () => {
 .textarea {
     resize: none;
     outline: none;
-    background-color: var(--btnColor);
+    background-color:  var(--btnColor);
     color:var(--textColor);
     border: none;
     padding: 10px;

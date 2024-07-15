@@ -188,6 +188,7 @@ const ExtendedStyle = Extension.create({
       },
     ];
   },
+  // @ts-ignore
   addCommands() {
     return {
       setElementStyle: (style) => ({ commands }) => {
@@ -220,7 +221,9 @@ const saveHTMLText = () => {
   let formdata = new FormData();
   formdata.append("username", store.username);
   formdata.append("id", store.openNoteID);
+  // @ts-ignore
   formdata.append("note", editorContent.value);
+  // @ts-ignore
   formdata.append("styleId", styleid);
   axios({
     method: 'post',

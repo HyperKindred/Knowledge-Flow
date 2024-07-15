@@ -39,11 +39,15 @@ const showLoading = ref(false);
 
 const switchLanguages = () => {
     if (mode.value === '0') {
+        // @ts-ignore
         document.querySelector('.left-language').style.left = 'calc(65% - 30px)';
+        // @ts-ignore
         document.querySelector('.right-language').style.left = '35%';
         mode.value = '1';
     } else {
+        // @ts-ignore
         document.querySelector('.left-language').style.left = '35%';
+        // @ts-ignore
         document.querySelector('.right-language').style.left = 'calc(65% - 30px)';
         mode.value = '0';
     }

@@ -87,18 +87,9 @@ const signIn = () =>{
         flex-direction: column;
         position: relative;
         left: 50%;
-        top: 50%;
+        top: 47%;
         transform: translate(-50%, -50%);
         backdrop-filter: blur(5px);
-        animation: appear 0.2s ease;
-    }
-    @keyframes appear {
-        0% {
-            height: 648px;
-        }
-        100% {
-            height: 548px;
-        }
     }
     .header {
         opacity: 0.7;
@@ -151,22 +142,12 @@ const signIn = () =>{
     .link {
         opacity: 0.9;
         color: #04073d;
-        animation: out 0.15s ease;
     }
     .msg {
         opacity: 0.7;
         text-align: center;
         line-height: 88px;
         color: #eeeeee;
-        animation: out 0.15s ease;
-    }
-    @keyframes out {
-        0% {
-            opacity: 0;
-        }
-        100% {
-            opacity: 0.7;
-        }
     }
 </style>
 
