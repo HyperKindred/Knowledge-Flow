@@ -293,6 +293,7 @@ function showEditorCard() {
   align-items: center;
   margin-bottom: 10px;
   background-color: rgba(32, 32, 32, 0);
+  overflow-y: hidden;
 }
 
 .add-file h2 {
@@ -327,9 +328,9 @@ function showEditorCard() {
   color: var(--titleColor);
   border-radius: 10px;
   padding: 10px;
-  max-height: 480px;
-
-  /* overflow-y: auto; */
+  max-height: 430px;
+  /* overflow-y: scroll; */
+  overflow-y: auto;
 }
 
 
