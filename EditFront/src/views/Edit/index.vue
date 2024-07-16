@@ -256,6 +256,7 @@ const autoFormat = () => {
   }).then(res => {
     const htmlContent = res.data.msg;
     store.setHTMLContent(htmlContent);
+    alert("自动排版成功");
   })
 }
 
