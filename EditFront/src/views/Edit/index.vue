@@ -42,12 +42,13 @@
           <div class="topBtn">
           <div id="switch" @click="toggleTheme"></div>
           <!-- <button class="topButton" @click="toggleTheme()">昼夜切换</button> -->
-          <button class="topButton" @click="autoFormat()">思维导图</button>
+          <button class="topButton" @click="autoMindmap()">思维导图</button>
           <button class="topButton" @click="autoFormat()">格式化</button>
           <button class="topButton" @click="saveHTMLText()">Save</button>
         </div>
         </div>
         <div class="editcont">
+          <div id="jsmind_container" ></div>
           <Loading v-if="showLoading"/>
           <ContextMenu>
           <EditorContent @mousescroll="" @mousedown="" @mousemove=""
@@ -124,6 +125,9 @@ import { Extension } from '@tiptap/core'
 import lightImage from '@/assets/images/light_background.jpg';
 import darkImage from '@/assets/images/dark_background.jpg';
 import ThemeIcon from '@/components/ThemeIcon.vue';
+
+import 'jsmind/style/jsmind.css';
+import jsMind from 'jsmind';
 const router = useRouter();
 const lowlight = createLowlight()
 lowlight.register({ html, ts, css, js })
@@ -141,6 +145,22 @@ const theme = ref('')
 const editorContent = ref('');
 const showLoading = ref(false);
 
+
+const mind = {
+  "meta": {
+    "name": "Hypercube",
+    "author": "haibara",
+    "version": "0.2"
+  },
+  "format": "node_tree",
+  "data": {
+    "id": "root",
+    "topic": "jsMind",
+    "children": [
+      
+    ]
+  }
+};
 
 function navigateTo(componentName) {
   router.push({ name: componentName });
@@ -254,32 +274,82 @@ const autoFormat = () => {
       'Content-Type': 'multipart/form-data'
     }
   }).then(res => {
-    const htmlContent = res.data.msg;
+  if(res.data.ret == 0){
+    const htmlContent = res.data.res;
     store.setHTMLContent(htmlContent);
     alert("自动排版成功");
+  }
+  else{
+    alert(res.data.msg);
+  }
   })
 }
 
-const autoMindmap = () => {
+const autoMindmap = async () => {
   if (editor.value) {
     editorContent.value = editor.value.getHTML();
   }
-  let formdata = new FormData();
-  formdata.append("text", editorContent.value);
-  formdata.append("username", store.username);
-  axios({
-    method: 'post',
-    url: `${store.ipAddress}/api/autoMindmap`,
-    data: formdata,
-    headers: {
-      'Content-Type': 'multipart/form-data'
+
+  let formData1 = new FormData();
+  formData1.append('username', store.username);
+
+  try {
+    // 第一个请求，获取 noteName
+    const res1 = await axios({
+      method: 'post',
+      url: `${store.ipAddress}/api/pullNoteList`,
+      data: formData1,
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+
+    let noteName = '';
+    for (let i = 0; i < res1.data.noteList.length; i++) {
+      if (res1.data.noteList[i][0] == store.openNoteID) {
+        noteName = res1.data.noteList[i][1];
+        break;
+      }
     }
-  }).then(res => {
-    if(res.data.ret){
-      alert(res.data.msg);
+
+    if (!noteName) {
+      throw new Error('Note name not found');
     }
-  })
-}
+
+    // 第二个请求，自动生成思维导图
+    let formData2 = new FormData();
+    formData2.append("text", editorContent.value);
+    formData2.append("noteName", noteName);
+
+    const res2 = await axios({
+      method: 'post',
+      url: `${store.ipAddress}/api/autoMindmap`,
+      data: formData2,
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+
+    if (res2.data.ret) {
+      alert(res2.data.msg);
+    } else {
+      console.log(mind.data);
+      const jsonString = res2.data.res;
+      const jsonData = JSON.parse(jsonString); 
+      mind.data = jsonData;
+      var options = {
+        container: 'jsmind_container',
+        theme: 'primary',
+        editable: true,
+      };
+      var jm = new jsMind(options);
+      jm.show(mind);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+
 
 watch(() => store.htmlContent, (newContent) => {
   if (editor.value) {
@@ -640,6 +710,12 @@ const stopLoading = () => {
   overflow-y: auto;
   object-fit: contain;
   background-color: var(--editorColor);
+}
+
+#jsmind_container{
+  max-height: 88vh;
+  width:100%;
+
 }
 
 

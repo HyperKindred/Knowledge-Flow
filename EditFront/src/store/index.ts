@@ -14,12 +14,14 @@ import { Highlight } from '@tiptap/extension-highlight';
 import { Italic } from '@tiptap/extension-italic';
 import MarkdownIt from 'markdown-it';
 import { DOMParser as ProseMirrorDOMParser } from 'prosemirror-model';
+import TextAlign from '@tiptap/extension-text-align'
 
 // 定义 Store
 export const mainStore = defineStore('main', {
   state: () => ({
     ipAddress: 'http://123.57.215.19:5000',
     isShow: false,
+    showMindMap: false,
     editorisShow: false,
     openStyleID: null,
     openNoteID: null,
@@ -122,9 +124,11 @@ export const mainStore = defineStore('main', {
           }),
           Highlight.configure({
             multicolor: true,  // 可选，允许多种颜色高亮
-            color: '#ffeb3b', // 可选，设置默认高亮颜色
           }),
           Italic,
+          TextAlign.configure({
+            types: ['paragraph', 'heading'],
+          }),
           ExtendedStyle,
           Paragraph,
           TaskList,
@@ -293,6 +297,7 @@ const ExtendedStyle = Extension.create({
       },
     ];
   },
+  // @ts-ignore
   addCommands() {
     return {
       setElementStyle: style => ({ commands }) => {
