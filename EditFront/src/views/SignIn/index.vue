@@ -52,6 +52,7 @@ const signIn = () =>{
         let responseData = response.data;
         if (responseData.ret === 0) {
             store.setUsername(username.value);
+            store.setIsOpen(true);
             localStorage.setItem('username', username.value);
             router.push({path:'/Edit'})
         } else if(responseData.ret === 1) {
