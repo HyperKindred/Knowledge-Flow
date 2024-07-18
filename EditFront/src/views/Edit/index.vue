@@ -156,6 +156,9 @@ const editorContent = ref('');
 const showLoading = ref(false);
 const showLoading2 = ref(false);
 const showMind = ref(false);
+const username = localStorage.getItem('username');
+
+store.setUsername(username);
 
 const mind = {
   "meta": {
