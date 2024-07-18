@@ -39,9 +39,12 @@
       <!-- <p>store.isShow: {{ store.isShow }}</p> -->
       <div v-if="showMind" class="jsmind_wrapper">
         <Loading v-if="showLoading2"/>
+        <div id="jsmind_btn">
+          <button class="jsmind_button" @click="backMindmap()">返回</button>
+          <button class="jsmind_button" @click="saveMindmap()">保存</button>
+        </div>
         <div id="jsmind_container"></div>
-        <button class="jsmind_button" @click="backMindmap()">返回</button>
-        <button class="jsmind_button" @click="saveMindmap()">保存</button>
+
       </div>
       <div v-if="store.isShow" class="editorcard">
         <div class="toptools">
@@ -688,16 +691,24 @@ const stopLoading = () => {
 .jsmind_wrapper {
   position: absolute;
   width: 95%;
-  height: 96%;
+  height: 95%;
   left: 2.5%;
   top: 2.5%;
   background-color: var(--openbackColor);
   z-index: 1;
 }
+#jsmind_btn{
+  position: absolute;
+  width: 100%;
+  height: 42px;
+  top: 0;
+  background-color: #adb5bd;
+}
 #jsmind_container {
   position: absolute;
   width: 100%;
-  height: 95%;
+  height: calc(100% - 42px);
+  top: 42px;
   background-color: var(--openbackColor);
   z-index: 1;
 }
@@ -708,9 +719,9 @@ const stopLoading = () => {
   border: 1.5px solid var(--titleColor);
   bottom: 0;
   z-index: 1;
-  top: 95%;
-  left: 88%;
-  margin-right: 10px;
+  top: 0%;
+  left: 86.5%;
+  margin-left: 8px;
 }
 
 .editorcard {
