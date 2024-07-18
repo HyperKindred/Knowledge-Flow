@@ -344,9 +344,9 @@ function showStyleEditor(data) {
   color: var(--titleColor);
   border-radius: 10px;
   padding: 10px;
-  max-height: 480px;
+  max-height: 100%;
 
-  /* overflow-y: auto; */
+  overflow-y: auto;
 }
 
 :deep().el-tree>.el-tree-node>.el-tree-node__content:hover {

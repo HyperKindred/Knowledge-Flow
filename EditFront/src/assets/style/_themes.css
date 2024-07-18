@@ -13,6 +13,8 @@
     --currentColor:rgba(184, 184, 184, 0.683);
     --loadingColor:rgba(255, 255, 255, 0.7);
     --loadingColor2:rgba(202, 202, 202, 0);
+    --openbackColor:rgb(255, 255, 255);
+    --openColor:rgb(0, 0, 0);
 }
 
 :root[theme='dark']{
@@ -30,4 +32,6 @@
     --currentColor:rgba(134, 134, 134, 0.683);
     --loadingColor:rgba(0, 0, 0, 0.7);
     --loadingColor2:rgba(0, 0, 0, 0);
+    --openbackColor:rgb(0, 0, 0);
+    --openColor:rgb(255, 255, 255);
 }

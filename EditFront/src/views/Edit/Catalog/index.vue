@@ -329,7 +329,7 @@ function showEditorCard() {
   color: var(--titleColor);
   border-radius: 10px;
   padding: 10px;
-  max-height: 430px;
+  max-height: 100%;
   /* overflow-y: scroll; */
   overflow-y: auto;
 }

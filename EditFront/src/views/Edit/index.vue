@@ -1,5 +1,6 @@
 <template>
   <div class="EditMain" ref="filecont" >
+    <OpenAnimation/>
     <img class="background" :src=currentImage />
     <div class="lefttools">
       <div class="lefttop">
@@ -83,6 +84,7 @@ import { storeToRefs } from 'pinia'
 import Underline from '@tiptap/extension-underline'
 import ContextMenu from '../../components/ContextMenu.vue'
 import Loading from '../../components/Loading.vue'
+import OpenAnimation from '../../components/OpenAnimation.vue'
 // 列表
 import ListItem from '@tiptap/extension-list-item'
 import OrderedList from '@tiptap/extension-ordered-list'
@@ -145,7 +147,6 @@ const theme = ref('')
 const editorContent = ref('');
 const showLoading = ref(false);
 
-
 const mind = {
   "meta": {
     "name": "Hypercube",
@@ -181,6 +182,8 @@ function navigateTo(componentName) {
 onMounted(() => {
   store.initializeTheme();
   theme.value = store.theme;
+  store.setIsOpen();
+  console.log(store.isOpen);
 });
 
 const currentImage = computed(() => {
@@ -261,6 +264,7 @@ const saveHTMLText = () => {
 
 
 const autoFormat = () => {
+  showLoading.value = true;
   if (editor.value) {
     editorContent.value = editor.value.getHTML();
   }
@@ -277,7 +281,7 @@ const autoFormat = () => {
   if(res.data.ret == 0){
     const htmlContent = res.data.res;
     store.setHTMLContent(htmlContent);
-    alert("自动排版成功");
+    showLoading.value = false;
   }
   else{
     alert(res.data.msg);
@@ -528,7 +532,7 @@ const stopLoading = () => {
   position: relative;
   display: flex;
   background-color: rgba(255, 255, 255, 0);
-  height: 100%;
+  height: 98.5vh;
   width: 100%;
   display: grid;
   grid-template-rows: 10% 10% 80%;

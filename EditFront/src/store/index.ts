@@ -32,6 +32,7 @@ export const mainStore = defineStore('main', {
     content: null,
     select: null,
     isLoading: false,
+    isOpen: false,
     headings: [],
     background: "night_background",
     theme: localStorage.getItem('theme') || 'dark',
@@ -213,13 +214,14 @@ export const mainStore = defineStore('main', {
     setUsername(username: string) {
       this.username = username
     },
+    setIsOpen(isOpen: boolean) {
+      this.isOpen = isOpen;
+    },
     toggleTheme() {
       this.theme = this.theme === 'light' ? 'dark' : 'light';
       document.documentElement.setAttribute('theme', this.theme);
       localStorage.setItem('theme', this.theme);
     }, 
-
-
     setTheme(theme: string) {
       this.theme = theme;
       document.documentElement.setAttribute('theme', theme);
@@ -272,7 +274,6 @@ export const mainStore = defineStore('main', {
       const transaction = state.tr.replaceSelectionWith(fragment);
       view.dispatch(transaction);
     },
-    
   },
 });
 

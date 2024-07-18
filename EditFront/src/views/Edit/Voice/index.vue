@@ -8,9 +8,9 @@
   </div>
   <div class="loadingarea">
     <Loading v-if="showLoading"/>
+    <div class="content">
+      {{ responseText }}
     </div>
-  <div class="content">
-    {{ responseText }}
   </div>
 </template>
 <script setup lang="ts">
@@ -102,11 +102,13 @@ padding-left: 15px;
 padding-right: 15px;
 object-fit: contain;  
 border-radius: 10px;
-background-color: rgba(134, 134, 134, 0.683);
+background-color: rgba(134, 134, 134, 0);
 }
 .loadingarea {
   position: relative;
   width: auto;
   height: calc(100% - 85.84px);
+  overflow-y: auto;
+  max-height: 100%;
 }
 </style>

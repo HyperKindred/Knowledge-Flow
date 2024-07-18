@@ -10,12 +10,12 @@
   </div>
   <div class="loadingarea">
     <Loading v-if="showLoading"/>
-  </div>
-  <div class="content">
-    <ul v-if="responseText.length > 0">
-      <li v-for="(item, index) in responseText" :key="index">{{ item }}</li>
-    </ul>
-    <p v-else>没有识别到内容</p>
+    <div class="content">
+      <ul v-if="responseText.length > 0">
+        <li v-for="(item, index) in responseText" :key="index">{{ item }}</li>
+      </ul>
+      <p v-else>没有识别到内容</p>
+    </div>
   </div>
 </template>
 
@@ -119,11 +119,13 @@ onMounted(() => {
   padding-right: 15px;
   object-fit: contain;  
   border-radius: 10px;
-  background-color: rgba(134, 134, 134, 0.683);
+  background-color: rgba(134, 134, 134, 0);
 }
 .loadingarea {
   position: relative;
   width: auto;
   height: calc(100% - 85.84px);
+  overflow-y: auto;
+  max-height: 100%;
 }
 </style>
