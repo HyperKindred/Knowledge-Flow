@@ -1,13 +1,15 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from mindmap import *
 import pymysql
 import erniebot
-from paddleocr import PaddleOCR
 import cv2
 import os
 import numpy as np
-from ppasr.predict import PPASRPredictor
 import re
+import base64
+import pathlib
+import requests
 DEBUG = True
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -17,8 +19,6 @@ with open("defaultStyle.json", "r", encoding="utf-8") as f:
     defaultStyle = f.read()
 erniebot.api_type = 'aistudio'
 erniebot.access_token = "85f4055523d16301b7b9eac2816814cee81d1238"
-ocr = PaddleOCR(use_angle_cls=True, lang="ch")
-voice_predictor = PPASRPredictor(model_tag='conformer_streaming_fbank_wenetspeech')
 
 # 用户登录与注册
 @app.route('/api/signIn', methods=["GET", "POST"])
@@ -27,7 +27,7 @@ def signIn():
         host='127.0.0.1', 
         port=3306, 
         user='root', 
-        password='123456', 
+        password='Mysql123#', 
         charset='utf8', 
         autocommit=True
     )
@@ -54,7 +54,7 @@ def signUp():
         host='127.0.0.1', 
         port=3306, 
         user='root', 
-        password='123456', 
+        password='Mysql123#', 
         charset='utf8', 
         autocommit=True
     )
@@ -82,7 +82,7 @@ def pullNoteList():
         host='127.0.0.1', 
         port=3306, 
         user='root', 
-        password='123456', 
+        password='Mysql123#', 
         charset='utf8', 
         autocommit=True
     )
@@ -91,11 +91,11 @@ def pullNoteList():
     if username == None:
         conn.close()
         return jsonify({"ret": 1, "msg": "用户名不存在！"})
-    cursor.execute("use knowledgeflow")
+    cursor.execute("use KnowledgeFlow")
     cursor.execute("show tables;")
     result = cursor.fetchall()
     tables = [row[0] for row in result]
-    if username.lower() not in tables:
+    if username not in tables:
         sql = f"create table `{username}`(id int unsigned auto_increment, noteName text, content longtext, styleId int unsigned, primary key ( `id` ));"
         cursor.execute(sql)
     cursor.execute(f"select * from `{username}`;")
@@ -114,7 +114,7 @@ def createNote():
         host='127.0.0.1', 
         port=3306, 
         user='root', 
-        password='123456', 
+        password='Mysql123#', 
         charset='utf8', 
         autocommit=True
     )
@@ -145,7 +145,7 @@ def renameNote():
         host='127.0.0.1', 
         port=3306, 
         user='root', 
-        password='123456', 
+        password='Mysql123#', 
         charset='utf8', 
         autocommit=True
     )
@@ -176,7 +176,7 @@ def delNote():
         host='127.0.0.1', 
         port=3306, 
         user='root', 
-        password='123456', 
+        password='Mysql123#', 
         charset='utf8', 
         autocommit=True
     )
@@ -206,7 +206,7 @@ def saveNote():
         host='127.0.0.1', 
         port=3306, 
         user='root', 
-        password='123456', 
+        password='Mysql123#', 
         charset='utf8', 
         autocommit=True
     )
@@ -241,7 +241,7 @@ def pullStyleList():
         host='127.0.0.1', 
         port=3306, 
         user='root', 
-        password='123456', 
+        password='Mysql123#', 
         charset='utf8', 
         autocommit=True
     )
@@ -254,7 +254,7 @@ def pullStyleList():
     cursor.execute("show tables;")
     result = cursor.fetchall()
     tables = [row[0] for row in result]    
-    if username.lower() not in tables:
+    if username not in tables:
         sql = f"create table `{username}`(id int unsigned auto_increment, styleName text, style longtext, primary key ( `id` ));"
         cursor.execute(sql)
         sql = f"insert into `{username}`(styleName, style) values('默认样式', '{defaultStyle}');"
@@ -275,7 +275,7 @@ def createStyle():
         host='127.0.0.1', 
         port=3306, 
         user='root', 
-        password='123456', 
+        password='Mysql123#', 
         charset='utf8', 
         autocommit=True
     )
@@ -306,7 +306,7 @@ def renameStyle():
         host='127.0.0.1', 
         port=3306, 
         user='root', 
-        password='123456', 
+        password='Mysql123#', 
         charset='utf8', 
         autocommit=True
     )
@@ -337,7 +337,7 @@ def delStyle():
         host='127.0.0.1', 
         port=3306, 
         user='root', 
-        password='123456', 
+        password='Mysql123#', 
         charset='utf8', 
         autocommit=True
     )
@@ -367,7 +367,7 @@ def saveStyle():
         host='127.0.0.1', 
         port=3306, 
         user='root', 
-        password='123456', 
+        password='Mysql123#', 
         charset='utf8', 
         autocommit=True
     )
@@ -476,10 +476,18 @@ def correct():
         data = {"ret": 1, "msg":"模型调用失败！"}
     return jsonify(data)
 
-# OCR模型，识别图片文字内容
 @app.route('/api/img2word', methods=["GET", "POST"])
 def img2word():
-    res = ""
+    API_URL = "https://n0p3ybs0m36ce8w7.aistudio-hub.baidu.com/ocr"
+    TOKEN = "85f4055523d16301b7b9eac2816814cee81d1238"
+
+    # 设置鉴权信息
+    headers = {
+        "Authorization": f"token {TOKEN}",
+        "Content-Type": "application/json"
+    }
+
+    res = []
     username = request.form.get("username")
     img = request.files['img']
     picname=img.filename
@@ -494,42 +502,27 @@ def img2word():
     cv2.imwrite(filename=imgPath, img=file)
 
     imgPath=imgfilePath+picname
-    try:
-        result = ocr.ocr(imgPath, cls=True)
-    except:
-        data = {"ret":1, "msg":"模型调用失败！"}
-        return jsonify(data)
-    for index in range(len(result)):
-        lines = result[index]
-        for line in lines:
-            res = res + line[1][0] + "\n"
-    data = {"ret":0, "res":res}
-    return jsonify(data)
 
-# ASR模型，识别语音文字内容
-@app.route('/api/voice2word', methods=["GET", "POST"])
-def voice2word():
-    username = request.form.get("username")
-    voice = request.files['voice']
-    voicename=voice.filename
-    file = voice.read()
-    voicefilePath = "./static/wavs/" + username + "/"
+    # 对本地图片进行Base64编码
+    image_path = imgPath
+    image_bytes = pathlib.Path(image_path).read_bytes()
+    image_base64 = base64.b64encode(image_bytes).decode('ascii')
 
-    if not os.path.exists(voicefilePath):
-        os.makedirs(voicefilePath)
-    imgPath = os.path.join(voicefilePath, voicename)
-    with open(imgPath, "wb") as f:
-        f.write(file)
-    voicePath=voicefilePath + voicename
-    try:
-        if os.path.getsize(voicePath) > 1024 * 1024 * 1:
-            result = voice_predictor.predict_long(audio_data=voicePath, use_pun=False)
-        else:
-            result = voice_predictor.predict(audio_data=voicePath, use_pun=False)
-    except:
-        data = {"ret":1, "msg":"模型调用失败！"}
-        return jsonify(data)
-    res = result["text"]
+    # 设置请求体
+    payload = {
+        "image": image_base64  # Base64编码的文件内容或者文件链接
+    }
+
+    # 调用
+    resp = requests.post(url=API_URL, json=payload, headers=headers)
+
+    # 处理接口返回数据
+    if resp.status_code != 200:
+        return jsonify({"ret":0, "img":"模型调用失败！"})
+    result = resp.json()["result"]
+    result = result["texts"]
+    for line in result:
+        res.append(line["text"])
     data = {"ret":0, "res":res}
     return jsonify(data)
 
@@ -558,32 +551,14 @@ def autoFormat():
 # 文本导出思维导图
 @app.route('/api/autoMindmap', methods=["GET", "POST"])
 def autoMindmap():
-    res = ""
-    username = request.form.get("username")
-    img = request.files['img']
-    picname=img.filename
-    file = img.read()
-
-    file = cv2.imdecode(np.frombuffer(file, np.uint8), cv2.IMREAD_COLOR)  # 解码为ndarray
-    imgfilePath = "./static/images/" + username + "/"
-
-    if not os.path.exists(imgfilePath):
-        os.makedirs(imgfilePath)
-    imgPath = os.path.join(imgfilePath, picname)
-    cv2.imwrite(filename=imgPath, img=file)
-
-    imgPath=imgfilePath+picname
+    noteName = request.form.get("noteName")
+    text = request.form.get("text")
     try:
-        result = ocr.ocr(imgPath, cls=True)
+        mindmap_json = parse_html_to_mindmap(text, noteName)
     except:
-        data = {"ret":1, "msg":"模型调用失败！"}
-        return jsonify(data)
-    for index in range(len(result)):
-        lines = result[index]
-        for line in lines:
-            res = res + line[1][0] + "\n"
-    data = {"ret":0, "res":res}
+        return jsonify({"ret": 1, "msg": "生成思维导图失败！"})
+    data = {"ret": 0, "res": mindmap_json}
     return jsonify(data)
 
 if __name__ == "__main__":
-    app.run(host="10.19.130.215", port="5000", debug=True)
+    app.run(host="0.0.0.0", port="5000", debug=True)
