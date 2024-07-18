@@ -9,7 +9,7 @@
     <input type="file" ref="fileInput" @change="handleFileChange" multiple hidden />
   </div>
   <div class="loadingarea">
-    <Loading v-if="showLoading"/>
+    <Loading2 v-if="showLoading"/>
     <div class="content">
       <ul v-if="responseText.length > 0">
         <li v-for="(item, index) in responseText" :key="index">{{ item }}</li>
@@ -23,7 +23,7 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { mainStore } from '@/store';
-import Loading from '../../../components/Loading.vue'
+import Loading2 from '../../../components/Loading2.vue'
 
 const theme = ref('');
 const store = mainStore();

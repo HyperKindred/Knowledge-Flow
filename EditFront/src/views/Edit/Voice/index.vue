@@ -7,7 +7,7 @@
       <input type="file" ref="fileInput" @change="handleFileChange" multiple hidden /> 
   </div>
   <div class="loadingarea">
-    <Loading v-if="showLoading"/>
+    <Loading2 v-if="showLoading"/>
     <div class="content">
       {{ responseText }}
     </div>
@@ -17,7 +17,7 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { mainStore } from '@/store';
-import Loading from '../../../components/Loading.vue'
+import Loading2 from '../../../components/Loading2.vue'
 
 const store = mainStore();
 const fileList = ref<File[]>([]);
@@ -44,11 +44,11 @@ let formData = new FormData();
 formData.append("username", store.username);
 fileList.value.forEach((file) => {
   formData.append("voice", file);
-  console.log(file);
+  console.log('Added file to formData:', file);
 });
 axios({
   method: 'post',
-  url: `https://ban2qdz2qaqbp8w5.aistudio-hub.baidu.com/api/voice2word`,
+  url: '/api/voice2word',
   data: formData,
   headers: {
     'Content-Type': 'multipart/form-data'
@@ -59,6 +59,8 @@ axios({
   } else {
     responseText.value = res.data.res;
   }
+}).catch(err => {
+  console.log(err);
 }).finally(() => {
   showLoading.value = false;
 });
