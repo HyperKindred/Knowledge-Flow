@@ -48,7 +48,7 @@ fileList.value.forEach((file) => {
 });
 axios({
   method: 'post',
-  url: `https://i5m342i628zawbn9.aistudio-hub.baidu.com/api/voice2word`,
+  url: `https://ban2qdz2qaqbp8w5.aistudio-hub.baidu.com/api/voice2word`,
   data: formData,
   headers: {
     'Content-Type': 'multipart/form-data'
