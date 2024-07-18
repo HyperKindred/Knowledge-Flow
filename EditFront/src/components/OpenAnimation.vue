@@ -39,7 +39,7 @@ setTimeout(() => {
     left: 0;
     top: 0;
     background-color: var(--openbackColor);
-    z-index: 2;
+    z-index: 3;
 }
 
 .loader1 {

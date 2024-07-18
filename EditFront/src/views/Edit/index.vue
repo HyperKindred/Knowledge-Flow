@@ -37,9 +37,15 @@
     </div>
     <div class="editor">
       <!-- <p>store.isShow: {{ store.isShow }}</p> -->
+      <div v-if="showMind" class="jsmind_wrapper">
+        <Loading v-if="showLoading2"/>
+        <div id="jsmind_container"></div>
+        <button class="jsmind_button" @click="backMindmap()">返回</button>
+        <button class="jsmind_button" @click="saveMindmap()">保存</button>
+      </div>
       <div v-if="store.isShow" class="editorcard">
         <div class="toptools">
-          <EditorMenu :editor="editor" />
+          <EditorMenu :editor="editor"/>
           <div class="topBtn">
           <div id="switch" @click="toggleTheme"></div>
           <!-- <button class="topButton" @click="toggleTheme()">昼夜切换</button> -->
@@ -49,7 +55,6 @@
         </div>
         </div>
         <div class="editcont">
-          <div id="jsmind_container" ></div>
           <Loading v-if="showLoading"/>
           <ContextMenu>
           <EditorContent @mousescroll="" @mousedown="" @mousemove=""
@@ -129,7 +134,10 @@ import darkImage from '@/assets/images/dark_background.jpg';
 import ThemeIcon from '@/components/ThemeIcon.vue';
 
 import 'jsmind/style/jsmind.css';
+import 'jsmind/screenshot'
 import jsMind from 'jsmind';
+import domtoimage from 'dom-to-image';
+
 const router = useRouter();
 const lowlight = createLowlight()
 lowlight.register({ html, ts, css, js })
@@ -146,6 +154,8 @@ const position = ref({
 const theme = ref('')
 const editorContent = ref('');
 const showLoading = ref(false);
+const showLoading2 = ref(false);
+const showMind = ref(false);
 
 const mind = {
   "meta": {
@@ -162,6 +172,8 @@ const mind = {
     ]
   }
 };
+
+let jm;
 
 function navigateTo(componentName) {
   router.push({ name: componentName });
@@ -182,8 +194,7 @@ function navigateTo(componentName) {
 onMounted(() => {
   store.initializeTheme();
   theme.value = store.theme;
-  store.setIsOpen();
-  console.log(store.isOpen);
+  store.setIsOpen(false);
 });
 
 const currentImage = computed(() => {
@@ -290,6 +301,9 @@ const autoFormat = () => {
 }
 
 const autoMindmap = async () => {
+  showLoading2.value = true;
+  showMind.value = true;
+
   if (editor.value) {
     editorContent.value = editor.value.getHTML();
   }
@@ -346,14 +360,22 @@ const autoMindmap = async () => {
         theme: 'primary',
         editable: true,
       };
-      var jm = new jsMind(options);
+      jm = new jsMind(options);
       jm.show(mind);
+      showLoading2.value = false;
     }
   } catch (error) {
     console.error('Error:', error);
   }
 };
 
+const backMindmap = () => {
+  showMind.value = false;
+};
+
+const saveMindmap = () => {
+  jm.shoot();
+};
 
 watch(() => store.htmlContent, (newContent) => {
   if (editor.value) {
@@ -623,7 +645,7 @@ const stopLoading = () => {
   right: 22%;
   top: -60px;
   cursor: pointer;
-  z-index: 9999;
+  z-index: 2;
 }
 
 #switch::after {
@@ -635,7 +657,7 @@ const stopLoading = () => {
   height: 22px;
   left: -10px;
   bottom: -20px;
-  z-index: 9999;
+  z-index: 2;
 }
 
 @keyframes line {
@@ -657,6 +679,35 @@ const stopLoading = () => {
 
 .editor {
   position: relative;
+  display: grid;
+}
+
+.jsmind_wrapper {
+  position: absolute;
+  width: 95%;
+  height: 96%;
+  left: 2.5%;
+  top: 2.5%;
+  background-color: var(--openbackColor);
+  z-index: 1;
+}
+#jsmind_container {
+  position: absolute;
+  width: 100%;
+  height: 95%;
+  background-color: var(--openbackColor);
+  z-index: 1;
+}
+.jsmind_button {
+  position: relative;
+  background-color: var(--btnColor);
+  color: var(--titleColor);
+  border: 1.5px solid var(--titleColor);
+  bottom: 0;
+  z-index: 1;
+  top: 95%;
+  left: 88%;
+  margin-right: 10px;
 }
 
 .editorcard {
@@ -715,13 +766,6 @@ const stopLoading = () => {
   object-fit: contain;
   background-color: var(--editorColor);
 }
-
-#jsmind_container{
-  max-height: 88vh;
-  width:100%;
-
-}
-
 
 .ProseMirror {
   overflow: hidden !important;

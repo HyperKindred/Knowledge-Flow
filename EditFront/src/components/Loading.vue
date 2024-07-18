@@ -22,7 +22,7 @@
     flex-direction: column;
     color: var(--titleColor);
     font-size: 15px;
-    z-index: 1;
+    z-index: 2;
     animation: easein 0.5s;
 }
 @keyframes easein {

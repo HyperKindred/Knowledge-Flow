@@ -72,7 +72,7 @@ onMounted(() => {
     justify-content: center;
     width: 50px;
     height: 50px;
-    z-index: 9999;
+    z-index: 2;
   }
   
   #sun-icon {
