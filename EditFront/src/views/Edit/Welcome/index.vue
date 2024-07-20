@@ -33,7 +33,7 @@ const authors = [
   { name: '@Hypercube', img: HypercubeImg },
   { name: '@FeBlue', img: FeBlueImg }
 ];
-const theme = ref('')
+const theme = ref('');
 
 onMounted(() => {
   store.initializeTheme();
@@ -49,6 +49,7 @@ onMounted(() => {
   align-items: center;
   height: 98.5vh;
   width: 99.2%;
+  overflow-x: hidden;
 }
 
 .center {
@@ -61,6 +62,7 @@ onMounted(() => {
 .welcome-text {
   text-align: center;
   color: var(--titleColor);
+  overflow-x: hidden;
 }
 
 .button {
@@ -74,6 +76,7 @@ onMounted(() => {
   right: 0;
   padding: 10px 0;
   background-color: var(--authorColor);
+  overflow-x: hidden;
 }
 
 .author {
@@ -81,12 +84,14 @@ onMounted(() => {
   justify-content: center;
   align-items: center;
   width: 100%;
+  overflow-x: hidden;
 }
 
 .profile-item {
   display: flex;
   align-items: center;
   margin: 0 30px;
+  overflow-x: hidden;
 }
 
 .profile {
@@ -102,11 +107,13 @@ onMounted(() => {
   border-radius: 50%;
   margin-right: 10px;
   filter: invert(var(--invert));
+  overflow-x: hidden;
 }
 
 .author h3 {
   margin: 0;
   color: var(--textColor);
+  overflow-x: hidden;
 }
 
 .top {
@@ -115,10 +122,18 @@ onMounted(() => {
   justify-content: flex-start;
   width: 100%;
   padding: 10px;
+  overflow: hidden;
 }
 
 .top h4 {
   margin: 0;
   color: var(--textColor);
+  overflow-x: hidden;
+}
+
+@media (max-width:750px) {
+  .top {
+    display: none;
+  }
 }
 </style>
