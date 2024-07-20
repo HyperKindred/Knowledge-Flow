@@ -42,6 +42,16 @@ const check = () => {
         return;
     }
 
+    if (/^\s*$/.test(username.value)) {
+        ElMessage({message: '用户名不能为空格', type: 'error', duration: 5 * 1000, grouping: true});
+        return;
+    }
+
+    if (password1.value.length < 6 || password1.value.length > 24) {
+        ElMessage({message: '密码长度必须为6-24位', type: 'error', duration: 5 * 1000, grouping: true});
+        return;
+    }
+
     console.log('password1:', password1);
     console.log('password2:', password2);
 
