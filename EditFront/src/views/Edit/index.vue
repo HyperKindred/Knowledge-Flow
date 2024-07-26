@@ -102,7 +102,7 @@ import ListItem from '@tiptap/extension-list-item'
 import OrderedList from '@tiptap/extension-ordered-list'
 import BulletList from '@tiptap/extension-bullet-list'
 // 左侧
-import misakaImg from '../../assets/images/Misaka Mikoto.webp'
+import misakaImg from '../../assets/images/Misaka Mikoto.png'
 import Catalog from './Catalog/index.vue'
 import Outline from './Outline/index.vue'
 import OCR from './OCR/index.vue'
@@ -637,7 +637,8 @@ const stopLoading = () => {
 
 
 .lefttop img{
-  height:auto;
+padding-left: 3%;
+  height:80%;
 }
 
 .icon{
